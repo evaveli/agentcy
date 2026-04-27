@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Enums",
+    "type": "object",
+    "properties": {
+      "protocolEnum": {
+        "type": "string",
+        "enum": ["HTTP", "HTTPS", "gRPC", "AMQP", "MQTT", "WebSocket"]
+      },
+      "authenticationTypeEnum": {
+        "type": "string",
+        "enum": ["None", "API_KEY", "OAUTH2", "BASIC"]
+      },
+      "httpMethodsEnum": {
+        "type": "string",
+        "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      },
+      "deploymentStrategyEnum": {
+        "type": "string",
+        "enum": ["Rolling", "BlueGreen", "Canary"]
+      },
+      "parameterInEnum": {
+        "type": "string",
+        "enum": ["query", "header", "path", "body"],
+        "description": "Parameter locations."
+      }
+    },
+    "additionalProperties": false
+  }
+  

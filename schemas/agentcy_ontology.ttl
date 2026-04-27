@@ -1,0 +1,220 @@
+@prefix ac: <http://agentcy.ai/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ac:Plan a owl:Class ;
+    rdfs:label "Plan" .
+
+ac:Task a owl:Class ;
+    rdfs:label "Task" .
+
+ac:Agent a owl:Class ;
+    rdfs:label "Agent" .
+
+ac:Capability a owl:Class ;
+    rdfs:label "Capability" .
+
+ac:Tag a owl:Class ;
+    rdfs:label "Tag" .
+
+ac:TaskType a owl:Class ;
+    rdfs:label "TaskType" .
+
+ac:hasTask a owl:ObjectProperty ;
+    rdfs:domain ac:Plan ;
+    rdfs:range ac:Task .
+
+ac:assignedAgent a owl:ObjectProperty ;
+    rdfs:domain ac:Task ;
+    rdfs:range ac:Agent .
+
+ac:requiresCapability a owl:ObjectProperty ;
+    rdfs:domain ac:Task ;
+    rdfs:range ac:Capability .
+
+ac:hasTag a owl:ObjectProperty ;
+    rdfs:domain ac:Task ;
+    rdfs:range ac:Tag .
+
+ac:taskType a owl:ObjectProperty ;
+    rdfs:domain ac:Task ;
+    rdfs:range ac:TaskType .
+
+ac:dependsOn a owl:ObjectProperty ;
+    rdfs:domain ac:Task ;
+    rdfs:range ac:Task .
+
+ac:planId a owl:DatatypeProperty ;
+    rdfs:domain ac:Plan ;
+    rdfs:range xsd:string .
+
+ac:pipelineId a owl:DatatypeProperty ;
+    rdfs:domain ac:Plan ;
+    rdfs:range xsd:string .
+
+ac:username a owl:DatatypeProperty ;
+    rdfs:domain ac:Plan ;
+    rdfs:range xsd:string .
+
+ac:taskId a owl:DatatypeProperty ;
+    rdfs:domain ac:Task ;
+    rdfs:range xsd:string .
+
+ac:agentId a owl:DatatypeProperty ;
+    rdfs:domain ac:Agent ;
+    rdfs:range xsd:string .
+
+# ── Execution History ────────────────────────────────────────────────
+
+ac:Execution a owl:Class ;
+    rdfs:label "Execution" ;
+    rdfs:comment "A single task execution record capturing what actually happened." .
+
+ac:executionOf a owl:ObjectProperty ;
+    rdfs:domain ac:Execution ;
+    rdfs:range ac:Task .
+
+ac:executedBy a owl:ObjectProperty ;
+    rdfs:domain ac:Execution ;
+    rdfs:range ac:Agent .
+
+ac:inRun a owl:ObjectProperty ;
+    rdfs:comment "Links an Execution or DataFlow to a pipeline run resource." .
+
+ac:executionStatus a owl:DatatypeProperty ;
+    rdfs:domain ac:Execution ;
+    rdfs:range xsd:string .
+
+ac:durationSeconds a owl:DatatypeProperty ;
+    rdfs:domain ac:Execution ;
+    rdfs:range xsd:decimal .
+
+ac:errorMessage a owl:DatatypeProperty ;
+    rdfs:domain ac:Execution ;
+    rdfs:range xsd:string .
+
+ac:executedAt a owl:DatatypeProperty ;
+    rdfs:domain ac:Execution ;
+    rdfs:range xsd:dateTime .
+
+ac:attemptNumber a owl:DatatypeProperty ;
+    rdfs:domain ac:Execution ;
+    rdfs:range xsd:integer .
+
+# ── Data Flow Lineage ────────────────────────────────────────────────
+
+ac:DataFlow a owl:Class ;
+    rdfs:label "DataFlow" ;
+    rdfs:comment "A data flow edge between tasks during execution." .
+
+ac:fromTask a owl:ObjectProperty ;
+    rdfs:domain ac:DataFlow ;
+    rdfs:range ac:Task .
+
+ac:toTask a owl:ObjectProperty ;
+    rdfs:domain ac:DataFlow ;
+    rdfs:range ac:Task .
+
+ac:flowTimestamp a owl:DatatypeProperty ;
+    rdfs:domain ac:DataFlow ;
+    rdfs:range xsd:dateTime .
+
+ac:payloadSizeBytes a owl:DatatypeProperty ;
+    rdfs:domain ac:DataFlow ;
+    rdfs:range xsd:integer .
+
+ac:payloadFields a owl:DatatypeProperty ;
+    rdfs:domain ac:DataFlow ;
+    rdfs:range xsd:string .
+
+# ── Capability Hierarchy ────────────────────────────────────────────
+
+ac:subCapabilityOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf rdfs:subClassOf ;
+    rdfs:domain ac:Capability ;
+    rdfs:range ac:Capability ;
+    rdfs:comment "Indicates that a capability is a specialization of another." .
+
+# ── Agent Templates ─────────────────────────────────────────────────
+
+ac:Template a owl:Class ;
+    rdfs:label "Template" ;
+    rdfs:comment "A reusable agent blueprint linked to capabilities and execution history." .
+
+ac:templateId a owl:DatatypeProperty ;
+    rdfs:domain ac:Template ;
+    rdfs:range xsd:string .
+
+ac:templateName a owl:DatatypeProperty ;
+    rdfs:domain ac:Template ;
+    rdfs:range xsd:string .
+
+ac:templateCategory a owl:DatatypeProperty ;
+    rdfs:domain ac:Template ;
+    rdfs:range xsd:string .
+
+ac:templateVersion a owl:DatatypeProperty ;
+    rdfs:domain ac:Template ;
+    rdfs:range xsd:string .
+
+ac:templateEnabled a owl:DatatypeProperty ;
+    rdfs:domain ac:Template ;
+    rdfs:range xsd:boolean .
+
+# ── Domain Knowledge ─────────────────────────────────────────────────
+
+ac:DomainEntity a owl:Class ;
+    rdfs:label "DomainEntity" ;
+    rdfs:comment "A business/domain concept extracted from NL descriptions." .
+
+ac:DomainRelationship a owl:Class ;
+    rdfs:label "DomainRelationship" ;
+    rdfs:comment "A named relationship between two domain entities." .
+
+ac:BusinessProcess a owl:Class ;
+    rdfs:label "BusinessProcess" ;
+    rdfs:comment "A high-level business process identified from pipeline descriptions." .
+
+ac:entityName a owl:DatatypeProperty ;
+    rdfs:domain ac:DomainEntity ;
+    rdfs:range xsd:string .
+
+ac:entityType a owl:DatatypeProperty ;
+    rdfs:domain ac:DomainEntity ;
+    rdfs:range xsd:string .
+
+ac:entityDescription a owl:DatatypeProperty ;
+    rdfs:domain ac:DomainEntity ;
+    rdfs:range xsd:string .
+
+ac:mentionCount a owl:DatatypeProperty ;
+    rdfs:domain ac:DomainEntity ;
+    rdfs:range xsd:integer .
+
+ac:fromEntity a owl:ObjectProperty ;
+    rdfs:domain ac:DomainRelationship ;
+    rdfs:range ac:DomainEntity .
+
+ac:toEntity a owl:ObjectProperty ;
+    rdfs:domain ac:DomainRelationship ;
+    rdfs:range ac:DomainEntity .
+
+ac:relationshipType a owl:DatatypeProperty ;
+    rdfs:domain ac:DomainRelationship ;
+    rdfs:range xsd:string .
+
+ac:processName a owl:DatatypeProperty ;
+    rdfs:domain ac:BusinessProcess ;
+    rdfs:range xsd:string .
+
+ac:processDescription a owl:DatatypeProperty ;
+    rdfs:domain ac:BusinessProcess ;
+    rdfs:range xsd:string .
+
+ac:involvesEntity a owl:ObjectProperty ;
+    rdfs:domain ac:BusinessProcess ;
+    rdfs:range ac:DomainEntity .
+
+ac:extractedFrom a owl:ObjectProperty ;
+    rdfs:comment "Links domain knowledge to the plan it was extracted from." .

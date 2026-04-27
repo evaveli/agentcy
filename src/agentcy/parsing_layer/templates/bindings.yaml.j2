@@ -1,0 +1,19 @@
+{% for binding in bindings %}
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: {{ binding.name }}
+spec:
+  vhost: "{{ binding.vhost }}"
+  source: "{{ binding.source }}"
+  destination: "{{ binding.destination }}"
+  destinationType: "{{ binding.destinationType }}"
+  routingKey: "{{ binding.routingKey }}"
+  {% if binding.arguments %}
+  arguments:
+    {% for key, value in binding.arguments.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
+  {% endif %}
+---
+{% endfor %}

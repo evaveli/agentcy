@@ -1,0 +1,4258 @@
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: pipeline_entry_65484feb-5068-4f03-979f-d4a82014adc0
+spec:
+  name: "pipeline_entry_65484feb-5068-4f03-979f-d4a82014adc0"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_1
+spec:
+  name: "exchange_task_1"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_2
+spec:
+  name: "exchange_task_2"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_3
+spec:
+  name: "exchange_task_3"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_4
+spec:
+  name: "exchange_task_4"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_5
+spec:
+  name: "exchange_task_5"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_6
+spec:
+  name: "exchange_task_6"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_7
+spec:
+  name: "exchange_task_7"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_8
+spec:
+  name: "exchange_task_8"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_9
+spec:
+  name: "exchange_task_9"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_10
+spec:
+  name: "exchange_task_10"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_11
+spec:
+  name: "exchange_task_11"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_12
+spec:
+  name: "exchange_task_12"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_13
+spec:
+  name: "exchange_task_13"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_14
+spec:
+  name: "exchange_task_14"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_15
+spec:
+  name: "exchange_task_15"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_16
+spec:
+  name: "exchange_task_16"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_17
+spec:
+  name: "exchange_task_17"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_18
+spec:
+  name: "exchange_task_18"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_19
+spec:
+  name: "exchange_task_19"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_20
+spec:
+  name: "exchange_task_20"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_21
+spec:
+  name: "exchange_task_21"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_22
+spec:
+  name: "exchange_task_22"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_23
+spec:
+  name: "exchange_task_23"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_24
+spec:
+  name: "exchange_task_24"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_25
+spec:
+  name: "exchange_task_25"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_26
+spec:
+  name: "exchange_task_26"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_27
+spec:
+  name: "exchange_task_27"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_28
+spec:
+  name: "exchange_task_28"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_29
+spec:
+  name: "exchange_task_29"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_task_30
+spec:
+  name: "exchange_task_30"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_pipeline_entry_65484feb-5068-4f03-979f-d4a82014adc0
+spec:
+  name: "exchange_pipeline_entry_65484feb-5068-4f03-979f-d4a82014adc0"
+  vhost: "your_vhost_value"
+  type: "direct"
+  durable: true
+---
+
+
+
+
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0
+spec:
+  name: "pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_1_to_task_2
+spec:
+  name: "dlx_queue_task_1_to_task_2"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_1_to_task_2_dlq
+spec:
+  name: "queue_task_1_to_task_2_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_1_to_task_2
+spec:
+  name: "queue_task_1_to_task_2"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_1_to_task_2"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_2_to_task_3
+spec:
+  name: "dlx_queue_task_2_to_task_3"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_3_dlq
+spec:
+  name: "queue_task_2_to_task_3_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_3
+spec:
+  name: "queue_task_2_to_task_3"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_2_to_task_3"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_3_to_task_4
+spec:
+  name: "dlx_queue_task_3_to_task_4"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_3_to_task_4_dlq
+spec:
+  name: "queue_task_3_to_task_4_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_3_to_task_4
+spec:
+  name: "queue_task_3_to_task_4"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_3_to_task_4"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_1_to_task_4
+spec:
+  name: "dlx_queue_task_1_to_task_4"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_1_to_task_4_dlq
+spec:
+  name: "queue_task_1_to_task_4_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_1_to_task_4
+spec:
+  name: "queue_task_1_to_task_4"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_1_to_task_4"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_2_to_task_5
+spec:
+  name: "dlx_queue_task_2_to_task_5"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_5_dlq
+spec:
+  name: "queue_task_2_to_task_5_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_5
+spec:
+  name: "queue_task_2_to_task_5"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_2_to_task_5"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_4_to_task_5
+spec:
+  name: "dlx_queue_task_4_to_task_5"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_4_to_task_5_dlq
+spec:
+  name: "queue_task_4_to_task_5_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_4_to_task_5
+spec:
+  name: "queue_task_4_to_task_5"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_4_to_task_5"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_5_to_task_6
+spec:
+  name: "dlx_queue_task_5_to_task_6"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_5_to_task_6_dlq
+spec:
+  name: "queue_task_5_to_task_6_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_5_to_task_6
+spec:
+  name: "queue_task_5_to_task_6"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_5_to_task_6"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_1_to_task_7
+spec:
+  name: "dlx_queue_task_1_to_task_7"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_1_to_task_7_dlq
+spec:
+  name: "queue_task_1_to_task_7_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_1_to_task_7
+spec:
+  name: "queue_task_1_to_task_7"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_1_to_task_7"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_6_to_task_7
+spec:
+  name: "dlx_queue_task_6_to_task_7"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_6_to_task_7_dlq
+spec:
+  name: "queue_task_6_to_task_7_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_6_to_task_7
+spec:
+  name: "queue_task_6_to_task_7"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_6_to_task_7"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_2_to_task_7
+spec:
+  name: "dlx_queue_task_2_to_task_7"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_7_dlq
+spec:
+  name: "queue_task_2_to_task_7_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_7
+spec:
+  name: "queue_task_2_to_task_7"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_2_to_task_7"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_7_to_task_8
+spec:
+  name: "dlx_queue_task_7_to_task_8"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_7_to_task_8_dlq
+spec:
+  name: "queue_task_7_to_task_8_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_7_to_task_8
+spec:
+  name: "queue_task_7_to_task_8"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_7_to_task_8"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_8_to_task_9
+spec:
+  name: "dlx_queue_task_8_to_task_9"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_9_dlq
+spec:
+  name: "queue_task_8_to_task_9_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_9
+spec:
+  name: "queue_task_8_to_task_9"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_8_to_task_9"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_4_to_task_9
+spec:
+  name: "dlx_queue_task_4_to_task_9"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_4_to_task_9_dlq
+spec:
+  name: "queue_task_4_to_task_9_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_4_to_task_9
+spec:
+  name: "queue_task_4_to_task_9"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_4_to_task_9"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_7_to_task_9
+spec:
+  name: "dlx_queue_task_7_to_task_9"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_7_to_task_9_dlq
+spec:
+  name: "queue_task_7_to_task_9_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_7_to_task_9
+spec:
+  name: "queue_task_7_to_task_9"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_7_to_task_9"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_9_to_task_10
+spec:
+  name: "dlx_queue_task_9_to_task_10"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_9_to_task_10_dlq
+spec:
+  name: "queue_task_9_to_task_10_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_9_to_task_10
+spec:
+  name: "queue_task_9_to_task_10"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_9_to_task_10"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_10_to_task_11
+spec:
+  name: "dlx_queue_task_10_to_task_11"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_10_to_task_11_dlq
+spec:
+  name: "queue_task_10_to_task_11_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_10_to_task_11
+spec:
+  name: "queue_task_10_to_task_11"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_10_to_task_11"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_5_to_task_11
+spec:
+  name: "dlx_queue_task_5_to_task_11"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_5_to_task_11_dlq
+spec:
+  name: "queue_task_5_to_task_11_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_5_to_task_11
+spec:
+  name: "queue_task_5_to_task_11"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_5_to_task_11"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_3_to_task_12
+spec:
+  name: "dlx_queue_task_3_to_task_12"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_3_to_task_12_dlq
+spec:
+  name: "queue_task_3_to_task_12_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_3_to_task_12
+spec:
+  name: "queue_task_3_to_task_12"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_3_to_task_12"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_11_to_task_12
+spec:
+  name: "dlx_queue_task_11_to_task_12"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_11_to_task_12_dlq
+spec:
+  name: "queue_task_11_to_task_12_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_11_to_task_12
+spec:
+  name: "queue_task_11_to_task_12"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_11_to_task_12"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_3_to_task_13
+spec:
+  name: "dlx_queue_task_3_to_task_13"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_3_to_task_13_dlq
+spec:
+  name: "queue_task_3_to_task_13_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_3_to_task_13
+spec:
+  name: "queue_task_3_to_task_13"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_3_to_task_13"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_11_to_task_13
+spec:
+  name: "dlx_queue_task_11_to_task_13"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_11_to_task_13_dlq
+spec:
+  name: "queue_task_11_to_task_13_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_11_to_task_13
+spec:
+  name: "queue_task_11_to_task_13"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_11_to_task_13"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_12_to_task_13
+spec:
+  name: "dlx_queue_task_12_to_task_13"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_12_to_task_13_dlq
+spec:
+  name: "queue_task_12_to_task_13_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_12_to_task_13
+spec:
+  name: "queue_task_12_to_task_13"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_12_to_task_13"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_2_to_task_13
+spec:
+  name: "dlx_queue_task_2_to_task_13"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_13_dlq
+spec:
+  name: "queue_task_2_to_task_13_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_2_to_task_13
+spec:
+  name: "queue_task_2_to_task_13"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_2_to_task_13"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_13_to_task_14
+spec:
+  name: "dlx_queue_task_13_to_task_14"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_13_to_task_14_dlq
+spec:
+  name: "queue_task_13_to_task_14_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_13_to_task_14
+spec:
+  name: "queue_task_13_to_task_14"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_13_to_task_14"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_7_to_task_14
+spec:
+  name: "dlx_queue_task_7_to_task_14"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_7_to_task_14_dlq
+spec:
+  name: "queue_task_7_to_task_14_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_7_to_task_14
+spec:
+  name: "queue_task_7_to_task_14"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_7_to_task_14"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_14_to_task_15
+spec:
+  name: "dlx_queue_task_14_to_task_15"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_14_to_task_15_dlq
+spec:
+  name: "queue_task_14_to_task_15_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_14_to_task_15
+spec:
+  name: "queue_task_14_to_task_15"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_14_to_task_15"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_10_to_task_16
+spec:
+  name: "dlx_queue_task_10_to_task_16"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_10_to_task_16_dlq
+spec:
+  name: "queue_task_10_to_task_16_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_10_to_task_16
+spec:
+  name: "queue_task_10_to_task_16"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_10_to_task_16"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_15_to_task_16
+spec:
+  name: "dlx_queue_task_15_to_task_16"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_15_to_task_16_dlq
+spec:
+  name: "queue_task_15_to_task_16_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_15_to_task_16
+spec:
+  name: "queue_task_15_to_task_16"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_15_to_task_16"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_16_to_task_17
+spec:
+  name: "dlx_queue_task_16_to_task_17"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_16_to_task_17_dlq
+spec:
+  name: "queue_task_16_to_task_17_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_16_to_task_17
+spec:
+  name: "queue_task_16_to_task_17"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_16_to_task_17"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_15_to_task_18
+spec:
+  name: "dlx_queue_task_15_to_task_18"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_15_to_task_18_dlq
+spec:
+  name: "queue_task_15_to_task_18_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_15_to_task_18
+spec:
+  name: "queue_task_15_to_task_18"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_15_to_task_18"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_8_to_task_18
+spec:
+  name: "dlx_queue_task_8_to_task_18"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_18_dlq
+spec:
+  name: "queue_task_8_to_task_18_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_18
+spec:
+  name: "queue_task_8_to_task_18"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_8_to_task_18"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_17_to_task_18
+spec:
+  name: "dlx_queue_task_17_to_task_18"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_17_to_task_18_dlq
+spec:
+  name: "queue_task_17_to_task_18_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_17_to_task_18
+spec:
+  name: "queue_task_17_to_task_18"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_17_to_task_18"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_18_to_task_19
+spec:
+  name: "dlx_queue_task_18_to_task_19"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_18_to_task_19_dlq
+spec:
+  name: "queue_task_18_to_task_19_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_18_to_task_19
+spec:
+  name: "queue_task_18_to_task_19"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_18_to_task_19"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_19_to_task_20
+spec:
+  name: "dlx_queue_task_19_to_task_20"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_19_to_task_20_dlq
+spec:
+  name: "queue_task_19_to_task_20_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_19_to_task_20
+spec:
+  name: "queue_task_19_to_task_20"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_19_to_task_20"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_20_to_task_21
+spec:
+  name: "dlx_queue_task_20_to_task_21"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_20_to_task_21_dlq
+spec:
+  name: "queue_task_20_to_task_21_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_20_to_task_21
+spec:
+  name: "queue_task_20_to_task_21"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_20_to_task_21"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_14_to_task_21
+spec:
+  name: "dlx_queue_task_14_to_task_21"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_14_to_task_21_dlq
+spec:
+  name: "queue_task_14_to_task_21_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_14_to_task_21
+spec:
+  name: "queue_task_14_to_task_21"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_14_to_task_21"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_8_to_task_22
+spec:
+  name: "dlx_queue_task_8_to_task_22"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_22_dlq
+spec:
+  name: "queue_task_8_to_task_22_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_22
+spec:
+  name: "queue_task_8_to_task_22"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_8_to_task_22"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_21_to_task_22
+spec:
+  name: "dlx_queue_task_21_to_task_22"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_21_to_task_22_dlq
+spec:
+  name: "queue_task_21_to_task_22_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_21_to_task_22
+spec:
+  name: "queue_task_21_to_task_22"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_21_to_task_22"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_22_to_task_23
+spec:
+  name: "dlx_queue_task_22_to_task_23"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_22_to_task_23_dlq
+spec:
+  name: "queue_task_22_to_task_23_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_22_to_task_23
+spec:
+  name: "queue_task_22_to_task_23"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_22_to_task_23"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_9_to_task_23
+spec:
+  name: "dlx_queue_task_9_to_task_23"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_9_to_task_23_dlq
+spec:
+  name: "queue_task_9_to_task_23_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_9_to_task_23
+spec:
+  name: "queue_task_9_to_task_23"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_9_to_task_23"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_23_to_task_24
+spec:
+  name: "dlx_queue_task_23_to_task_24"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_23_to_task_24_dlq
+spec:
+  name: "queue_task_23_to_task_24_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_23_to_task_24
+spec:
+  name: "queue_task_23_to_task_24"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_23_to_task_24"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_24_to_task_25
+spec:
+  name: "dlx_queue_task_24_to_task_25"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_24_to_task_25_dlq
+spec:
+  name: "queue_task_24_to_task_25_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_24_to_task_25
+spec:
+  name: "queue_task_24_to_task_25"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_24_to_task_25"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_8_to_task_26
+spec:
+  name: "dlx_queue_task_8_to_task_26"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_26_dlq
+spec:
+  name: "queue_task_8_to_task_26_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_8_to_task_26
+spec:
+  name: "queue_task_8_to_task_26"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_8_to_task_26"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_25_to_task_26
+spec:
+  name: "dlx_queue_task_25_to_task_26"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_25_to_task_26_dlq
+spec:
+  name: "queue_task_25_to_task_26_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_25_to_task_26
+spec:
+  name: "queue_task_25_to_task_26"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_25_to_task_26"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_26_to_task_27
+spec:
+  name: "dlx_queue_task_26_to_task_27"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_26_to_task_27_dlq
+spec:
+  name: "queue_task_26_to_task_27_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_26_to_task_27
+spec:
+  name: "queue_task_26_to_task_27"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_26_to_task_27"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_16_to_task_28
+spec:
+  name: "dlx_queue_task_16_to_task_28"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_16_to_task_28_dlq
+spec:
+  name: "queue_task_16_to_task_28_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_16_to_task_28
+spec:
+  name: "queue_task_16_to_task_28"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_16_to_task_28"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_27_to_task_28
+spec:
+  name: "dlx_queue_task_27_to_task_28"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_27_to_task_28_dlq
+spec:
+  name: "queue_task_27_to_task_28_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_27_to_task_28
+spec:
+  name: "queue_task_27_to_task_28"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_27_to_task_28"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_28_to_task_29
+spec:
+  name: "dlx_queue_task_28_to_task_29"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_28_to_task_29_dlq
+spec:
+  name: "queue_task_28_to_task_29_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_28_to_task_29
+spec:
+  name: "queue_task_28_to_task_29"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_28_to_task_29"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_task_29_to_task_30
+spec:
+  name: "dlx_queue_task_29_to_task_30"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_29_to_task_30_dlq
+spec:
+  name: "queue_task_29_to_task_30_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_task_29_to_task_30
+spec:
+  name: "queue_task_29_to_task_30"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_task_29_to_task_30"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0
+spec:
+  name: "dlx_pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+  vhost: "your_vhost_value"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0_dlq
+spec:
+  name: "pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0_dlq"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0
+spec:
+  name: "pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+  vhost: "your_vhost_value"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+    
+  
+---
+
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_entry_to_queue_65484feb-5068-4f03-979f-d4a82014adc0
+spec:
+  vhost: "your_vhost_value"
+  source: "pipeline_entry_65484feb-5068-4f03-979f-d4a82014adc0"
+  destination: "pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+  destinationType: "queue"
+  routingKey: "start"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_1_queue_task_1_to_task_2
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_1"
+  destination: "queue_task_1_to_task_2"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_2_queue_task_2_to_task_3
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_2"
+  destination: "queue_task_2_to_task_3"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_3_queue_task_3_to_task_4
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_3"
+  destination: "queue_task_3_to_task_4"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_1_queue_task_1_to_task_4
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_1"
+  destination: "queue_task_1_to_task_4"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_2_queue_task_2_to_task_5
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_2"
+  destination: "queue_task_2_to_task_5"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_4_queue_task_4_to_task_5
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_4"
+  destination: "queue_task_4_to_task_5"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_4-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_5_queue_task_5_to_task_6
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_5"
+  destination: "queue_task_5_to_task_6"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_5-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_1_queue_task_1_to_task_7
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_1"
+  destination: "queue_task_1_to_task_7"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_6_queue_task_6_to_task_7
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_6"
+  destination: "queue_task_6_to_task_7"
+  destinationType: "queue"
+  routingKey: "queue_task_6_to_task_7"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_2_queue_task_2_to_task_7
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_2"
+  destination: "queue_task_2_to_task_7"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_7_queue_task_7_to_task_8
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_7"
+  destination: "queue_task_7_to_task_8"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_7-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_8_queue_task_8_to_task_9
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_8"
+  destination: "queue_task_8_to_task_9"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_4_queue_task_4_to_task_9
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_4"
+  destination: "queue_task_4_to_task_9"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_4-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_7_queue_task_7_to_task_9
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_7"
+  destination: "queue_task_7_to_task_9"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_7-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_9_queue_task_9_to_task_10
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_9"
+  destination: "queue_task_9_to_task_10"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_9-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_10_queue_task_10_to_task_11
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_10"
+  destination: "queue_task_10_to_task_11"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_5_queue_task_5_to_task_11
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_5"
+  destination: "queue_task_5_to_task_11"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_5-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_3_queue_task_3_to_task_12
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_3"
+  destination: "queue_task_3_to_task_12"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_11_queue_task_11_to_task_12
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_11"
+  destination: "queue_task_11_to_task_12"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_11-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_3_queue_task_3_to_task_13
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_3"
+  destination: "queue_task_3_to_task_13"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_11_queue_task_11_to_task_13
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_11"
+  destination: "queue_task_11_to_task_13"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_11-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_12_queue_task_12_to_task_13
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_12"
+  destination: "queue_task_12_to_task_13"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_12-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_2_queue_task_2_to_task_13
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_2"
+  destination: "queue_task_2_to_task_13"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_13_queue_task_13_to_task_14
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_13"
+  destination: "queue_task_13_to_task_14"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_13-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_7_queue_task_7_to_task_14
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_7"
+  destination: "queue_task_7_to_task_14"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_7-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_14_queue_task_14_to_task_15
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_14"
+  destination: "queue_task_14_to_task_15"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_14-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_10_queue_task_10_to_task_16
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_10"
+  destination: "queue_task_10_to_task_16"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_15_queue_task_15_to_task_16
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_15"
+  destination: "queue_task_15_to_task_16"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_16_queue_task_16_to_task_17
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_16"
+  destination: "queue_task_16_to_task_17"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_16-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_15_queue_task_15_to_task_18
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_15"
+  destination: "queue_task_15_to_task_18"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_8_queue_task_8_to_task_18
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_8"
+  destination: "queue_task_8_to_task_18"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_17_queue_task_17_to_task_18
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_17"
+  destination: "queue_task_17_to_task_18"
+  destinationType: "queue"
+  routingKey: "queue_task_17_to_task_18"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_18_queue_task_18_to_task_19
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_18"
+  destination: "queue_task_18_to_task_19"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_18-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_19_queue_task_19_to_task_20
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_19"
+  destination: "queue_task_19_to_task_20"
+  destinationType: "queue"
+  routingKey: "queue_task_19_to_task_20"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_20_queue_task_20_to_task_21
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_20"
+  destination: "queue_task_20_to_task_21"
+  destinationType: "queue"
+  routingKey: "queue_task_20_to_task_21"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_14_queue_task_14_to_task_21
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_14"
+  destination: "queue_task_14_to_task_21"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_14-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_8_queue_task_8_to_task_22
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_8"
+  destination: "queue_task_8_to_task_22"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_21_queue_task_21_to_task_22
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_21"
+  destination: "queue_task_21_to_task_22"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_21-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_22_queue_task_22_to_task_23
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_22"
+  destination: "queue_task_22_to_task_23"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_22-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_9_queue_task_9_to_task_23
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_9"
+  destination: "queue_task_9_to_task_23"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_9-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_23_queue_task_23_to_task_24
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_23"
+  destination: "queue_task_23_to_task_24"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_23-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_24_queue_task_24_to_task_25
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_24"
+  destination: "queue_task_24_to_task_25"
+  destinationType: "queue"
+  routingKey: "queue_task_24_to_task_25"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_8_queue_task_8_to_task_26
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_8"
+  destination: "queue_task_8_to_task_26"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_25_queue_task_25_to_task_26
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_25"
+  destination: "queue_task_25_to_task_26"
+  destinationType: "queue"
+  routingKey: "queue_task_25_to_task_26"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_26_queue_task_26_to_task_27
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_26"
+  destination: "queue_task_26_to_task_27"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_26-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_16_queue_task_16_to_task_28
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_16"
+  destination: "queue_task_16_to_task_28"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_16-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_27_queue_task_27_to_task_28
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_27"
+  destination: "queue_task_27_to_task_28"
+  destinationType: "queue"
+  routingKey: "queue_task_27_to_task_28"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_28_queue_task_28_to_task_29
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_28"
+  destination: "queue_task_28_to_task_29"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-task_28-65484feb-5068-4f03-979f-d4a82014adc0"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_29_queue_task_29_to_task_30
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_29"
+  destination: "queue_task_29_to_task_30"
+  destinationType: "queue"
+  routingKey: "queue_task_29_to_task_30"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_task_30_queue_task_29_to_task_30
+spec:
+  vhost: "your_vhost_value"
+  source: "exchange_task_30"
+  destination: "queue_task_29_to_task_30"
+  destinationType: "queue"
+  routingKey: "queue_task_29_to_task_30"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_entry_pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0
+spec:
+  vhost: "your_vhost_value"
+  source: "pipeline_entry_65484feb-5068-4f03-979f-d4a82014adc0"
+  destination: "pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+  destinationType: "queue"
+  routingKey: "pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_1_to_task_2_to_queue_task_1_to_task_2_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_1_to_task_2"
+  destination: "queue_task_1_to_task_2_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_2_to_task_3_to_queue_task_2_to_task_3_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_2_to_task_3"
+  destination: "queue_task_2_to_task_3_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_3_to_task_4_to_queue_task_3_to_task_4_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_3_to_task_4"
+  destination: "queue_task_3_to_task_4_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_1_to_task_4_to_queue_task_1_to_task_4_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_1_to_task_4"
+  destination: "queue_task_1_to_task_4_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_2_to_task_5_to_queue_task_2_to_task_5_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_2_to_task_5"
+  destination: "queue_task_2_to_task_5_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_4_to_task_5_to_queue_task_4_to_task_5_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_4_to_task_5"
+  destination: "queue_task_4_to_task_5_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_5_to_task_6_to_queue_task_5_to_task_6_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_5_to_task_6"
+  destination: "queue_task_5_to_task_6_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_1_to_task_7_to_queue_task_1_to_task_7_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_1_to_task_7"
+  destination: "queue_task_1_to_task_7_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_6_to_task_7_to_queue_task_6_to_task_7_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_6_to_task_7"
+  destination: "queue_task_6_to_task_7_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_2_to_task_7_to_queue_task_2_to_task_7_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_2_to_task_7"
+  destination: "queue_task_2_to_task_7_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_7_to_task_8_to_queue_task_7_to_task_8_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_7_to_task_8"
+  destination: "queue_task_7_to_task_8_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_8_to_task_9_to_queue_task_8_to_task_9_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_8_to_task_9"
+  destination: "queue_task_8_to_task_9_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_4_to_task_9_to_queue_task_4_to_task_9_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_4_to_task_9"
+  destination: "queue_task_4_to_task_9_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_7_to_task_9_to_queue_task_7_to_task_9_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_7_to_task_9"
+  destination: "queue_task_7_to_task_9_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_9_to_task_10_to_queue_task_9_to_task_10_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_9_to_task_10"
+  destination: "queue_task_9_to_task_10_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_10_to_task_11_to_queue_task_10_to_task_11_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_10_to_task_11"
+  destination: "queue_task_10_to_task_11_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_5_to_task_11_to_queue_task_5_to_task_11_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_5_to_task_11"
+  destination: "queue_task_5_to_task_11_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_3_to_task_12_to_queue_task_3_to_task_12_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_3_to_task_12"
+  destination: "queue_task_3_to_task_12_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_11_to_task_12_to_queue_task_11_to_task_12_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_11_to_task_12"
+  destination: "queue_task_11_to_task_12_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_3_to_task_13_to_queue_task_3_to_task_13_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_3_to_task_13"
+  destination: "queue_task_3_to_task_13_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_11_to_task_13_to_queue_task_11_to_task_13_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_11_to_task_13"
+  destination: "queue_task_11_to_task_13_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_12_to_task_13_to_queue_task_12_to_task_13_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_12_to_task_13"
+  destination: "queue_task_12_to_task_13_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_2_to_task_13_to_queue_task_2_to_task_13_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_2_to_task_13"
+  destination: "queue_task_2_to_task_13_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_13_to_task_14_to_queue_task_13_to_task_14_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_13_to_task_14"
+  destination: "queue_task_13_to_task_14_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_7_to_task_14_to_queue_task_7_to_task_14_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_7_to_task_14"
+  destination: "queue_task_7_to_task_14_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_14_to_task_15_to_queue_task_14_to_task_15_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_14_to_task_15"
+  destination: "queue_task_14_to_task_15_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_10_to_task_16_to_queue_task_10_to_task_16_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_10_to_task_16"
+  destination: "queue_task_10_to_task_16_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_15_to_task_16_to_queue_task_15_to_task_16_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_15_to_task_16"
+  destination: "queue_task_15_to_task_16_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_16_to_task_17_to_queue_task_16_to_task_17_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_16_to_task_17"
+  destination: "queue_task_16_to_task_17_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_15_to_task_18_to_queue_task_15_to_task_18_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_15_to_task_18"
+  destination: "queue_task_15_to_task_18_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_8_to_task_18_to_queue_task_8_to_task_18_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_8_to_task_18"
+  destination: "queue_task_8_to_task_18_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_17_to_task_18_to_queue_task_17_to_task_18_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_17_to_task_18"
+  destination: "queue_task_17_to_task_18_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_18_to_task_19_to_queue_task_18_to_task_19_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_18_to_task_19"
+  destination: "queue_task_18_to_task_19_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_19_to_task_20_to_queue_task_19_to_task_20_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_19_to_task_20"
+  destination: "queue_task_19_to_task_20_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_20_to_task_21_to_queue_task_20_to_task_21_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_20_to_task_21"
+  destination: "queue_task_20_to_task_21_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_14_to_task_21_to_queue_task_14_to_task_21_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_14_to_task_21"
+  destination: "queue_task_14_to_task_21_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_8_to_task_22_to_queue_task_8_to_task_22_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_8_to_task_22"
+  destination: "queue_task_8_to_task_22_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_21_to_task_22_to_queue_task_21_to_task_22_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_21_to_task_22"
+  destination: "queue_task_21_to_task_22_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_22_to_task_23_to_queue_task_22_to_task_23_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_22_to_task_23"
+  destination: "queue_task_22_to_task_23_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_9_to_task_23_to_queue_task_9_to_task_23_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_9_to_task_23"
+  destination: "queue_task_9_to_task_23_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_23_to_task_24_to_queue_task_23_to_task_24_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_23_to_task_24"
+  destination: "queue_task_23_to_task_24_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_24_to_task_25_to_queue_task_24_to_task_25_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_24_to_task_25"
+  destination: "queue_task_24_to_task_25_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_8_to_task_26_to_queue_task_8_to_task_26_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_8_to_task_26"
+  destination: "queue_task_8_to_task_26_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_25_to_task_26_to_queue_task_25_to_task_26_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_25_to_task_26"
+  destination: "queue_task_25_to_task_26_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_26_to_task_27_to_queue_task_26_to_task_27_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_26_to_task_27"
+  destination: "queue_task_26_to_task_27_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_16_to_task_28_to_queue_task_16_to_task_28_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_16_to_task_28"
+  destination: "queue_task_16_to_task_28_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_27_to_task_28_to_queue_task_27_to_task_28_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_27_to_task_28"
+  destination: "queue_task_27_to_task_28_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_28_to_task_29_to_queue_task_28_to_task_29_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_28_to_task_29"
+  destination: "queue_task_28_to_task_29_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_task_29_to_task_30_to_queue_task_29_to_task_30_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_queue_task_29_to_task_30"
+  destination: "queue_task_29_to_task_30_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0_to_pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0_dlq
+spec:
+  vhost: "your_vhost_value"
+  source: "dlx_pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0"
+  destination: "pipeline_entry_queue_65484feb-5068-4f03-979f-d4a82014adc0_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---

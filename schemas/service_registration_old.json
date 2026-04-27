@@ -1,0 +1,87 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "ServiceRegistration",
+    "type": "object",
+    "required": ["service_id", "service_name", "protocol", "endpoints"],
+    "properties": {
+      "service_id": {
+        "type": "string",
+        "description": "Globally unique identifier for the service, preferably a UUID."
+      },
+      "service_name": {
+        "type": "string",
+        "description": "Human-readable name of the service."
+      },
+      "description": {
+        "type": "string",
+        "description": "Detailed description of the service's functionality."
+      },
+      "protocol": {
+        "$ref": "definitions/Enums.json#/properties/protocolEnum",
+        "description": "Communication protocol used by the service."
+      },
+      "base_url": {
+        "type": "string",
+        "format": "uri",
+        "description": "Base URL or endpoint where the service is accessible."
+      },
+      "authentication": {
+        "$ref": "definitions/Authentication.json"
+      },
+      "endpoints": {
+        "type": "array",
+        "description": "List of service endpoints with their configurations.",
+        "items": {
+          "$ref": "definitions/Endpoint.json"
+        },
+        "minItems": 1
+      },
+      "schemas": {
+        "type": "object",
+        "description": "Schemas for input and output validation per endpoint.",
+        "properties": {
+          "input_schemas": {
+            "type": "object",
+            "description": "JSON Schemas for validating input data.",
+            "additionalProperties": {
+              "$ref": "definitions/JSONSchema.json"
+            }
+          },
+          "output_schemas": {
+            "type": "object",
+            "description": "JSON Schemas for validating output data.",
+            "additionalProperties": {
+              "$ref": "definitions/JSONSchema.json"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Additional metadata for the service.",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version of the service."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags or labels associated with the service.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deployment": {
+            "$ref": "definitions/DeploymentConfig.json"
+          },
+          "scaling": {
+            "$ref": "definitions/ScalingConfig.json"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "additionalProperties": false
+  }
+  

@@ -1,0 +1,29 @@
+FROM python:3.11-slim
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        ca-certificates curl gnupg skopeo golang-github-containers-common; \
+    rm -rf /var/lib/apt/lists/*
+
+ENV VENV=/opt/venv \
+    PATH="/opt/venv/bin:$PATH" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+# ✅ use the venv’s pip explicitly
+RUN python -m venv "$VENV" && "$VENV/bin/pip" install --upgrade pip
+
+WORKDIR /app
+# make /app/src importable as top-level 'agentcy'
+ENV PYTHONPATH=/app/src
+
+COPY requirements.txt /tmp/requirements/
+# ✅ use the venv’s pip explicitly
+RUN "$VENV/bin/pip" install --no-cache-dir -r /tmp/requirements/requirements.txt
+
+COPY . /app
+RUN useradd -u 10001 -r -m app && chown -R app:app /app
+USER app

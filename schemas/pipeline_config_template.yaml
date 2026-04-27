@@ -1,0 +1,60 @@
+# Pipeline Configuration Template
+# --------------------------------
+# Fill out the necessary fields below to define your pipeline.
+
+pipeline_id: "pipeline-<unique-pipeline-id>"  # Replace with a unique pipeline ID, e.g., "pipeline-12345"
+name: "Your Pipeline Name"  # Replace with the name of your pipeline, e.g., "User Onboarding Pipeline"
+description: "A brief description of what this pipeline does."  # e.g., "Handles user registration and welcome email sending."
+
+steps:
+  - step_id: "step1"  # Unique identifier for this step
+    service_name: "user_service"  # Name of the microservice as registered in Consul
+    service_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6"  # Optional: Service ID for debugging
+    action: "Create User"  # Action to perform, corresponds to an endpoint or function
+    description: "Creates a new user account."  # Description of what this step does
+    dependencies: []  # List of step_ids that must complete before this step
+    input_mapping:
+      user_data: "trigger.input.user_data"  # Map input fields
+    output_mapping:
+      user_id: "step1.output.userId"  # Map output fields
+
+  - step_id: "step2"
+    service_name: "email_service"
+    service_id: "4ab85f64-5717-4562-b3fc-2c963f66afb7"
+    action: "Send Welcome Email"
+    description: "Sends a welcome email to the newly created user."
+    dependencies:
+      - "step1"  # Depends on step1
+    input_mapping:
+      email: "step1.output.email"
+      user_id: "step1.output.user_id"
+    output_mapping:
+      email_status: "step2.output.emailStatus"
+
+  - step_id: "step3"
+    service_name: "analytics_service"
+    service_id: "5cb85f64-5717-4562-b3fc-2c963f66afc8"
+    action: "Log User Onboarding"
+    description: "Logs the onboarding event for analytics."
+    dependencies:
+      - "step1"
+      - "step2"
+    input_mapping:
+      user_id: "step1.output.user_id"
+      timestamp: "current_time"
+    output_mapping:
+      log_status: "step3.output.logStatus"
+
+error_handling:
+  retry_policy:
+    max_retries: 3  # Number of retry attempts for failed steps
+    backoff_strategy: "exponential"  # Choose from "none", "fixed", "exponential"
+  on_failure: "abort"  # Choose from "abort", "continue", "fallback"
+
+parallel_execution:
+  enabled: true  # Enable or disable parallel execution
+  rules:
+    - steps: ["step1"]  # Steps in this group
+      can_run_in_parallel: false  # These steps cannot run in parallel
+    - steps: ["step2", "step3"]  # Steps in this group
+      can_run_in_parallel: true  # These steps can run in parallel

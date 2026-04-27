@@ -1,0 +1,93 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "DeploymentConfig",
+    "type": "object",
+    "description": "Detailed deployment configurations for the service.",
+    "required": ["deployment_strategy", "replicas"],
+    "properties": {
+        "deployment_strategy": {
+            "$ref": "DeploymentStrategyEnum.json",
+            "description": "Strategy to deploy the service."
+        },
+        "replicas": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of service instances to run."
+        },
+        "resource_allocation": {
+            "type": "object",
+            "description": "CPU and memory resource allocations for the service.",
+            "required": ["cpu", "memory"],
+            "properties": {
+                "cpu": {
+                    "type": "string",
+                    "description": "CPU allocation (e.g., '500m' for 0.5 CPU)."
+                },
+                "memory": {
+                    "type": "string",
+                    "description": "Memory allocation (e.g., '256Mi')."
+                }
+            },
+            "additionalProperties": false
+        },
+        "environment_variables": {
+            "type": "object",
+            "description": "Environment variables to set in the service instances.",
+            "patternProperties": {
+                "^[A-Z_][A-Z0-9_]*$": {
+                    "type": "string",
+                    "description": "Value of the environment variable."
+                }
+            },
+            "additionalProperties": false
+        },
+        "auto_scale": {
+            "type": "boolean",
+            "description": "Indicates if auto-scaling is enabled."
+        },
+        "min_replicas": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Minimum number of service instances when auto-scaling is enabled."
+        },
+        "max_replicas": {
+            "type": "integer",
+            "maximum": 10,
+            "description": "Maximum number of service instances when auto-scaling is enabled."
+        },
+        "scaling_metrics": {
+            "type": "array",
+            "description": "List of metrics to monitor for scaling decisions.",
+            "items": {
+                "type": "string",
+                "description": "Name of the metric (e.g., 'CPUUsage')."
+            },
+            "minItems": 1
+        },
+        "health_check": {
+            "type": "object",
+            "description": "Health check configuration for the service.",
+            "required": ["endpoint", "interval", "timeout"],
+            "properties": {
+                "endpoint": {
+                    "type": "string",
+                    "description": "Health check endpoint path (e.g., '/health')."
+                },
+                "interval": {
+                    "type": "string",
+                    "description": "Interval between health checks (e.g., '10s')."
+                },
+                "timeout": {
+                    "type": "string",
+                    "description": "Timeout for each health check (e.g., '1s')."
+                },
+                "deregister_after": {
+                    "type": "string",
+                    "description": "Time after which to deregister the service if health checks fail (e.g., '1m')."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

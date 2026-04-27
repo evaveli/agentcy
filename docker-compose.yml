@@ -1,0 +1,1163 @@
+name: agentcy-stack
+
+networks:
+  agentcy:
+    driver: bridge
+
+volumes:
+  cb-data:
+  nexus-data:
+  rabbit-data:
+  traefik-acme:
+  fuseki-data:
+  grafana-data:
+  loki-data:
+  tempo-data:
+  prometheus-data:
+  pgdata:
+
+services:
+  # ─────────── Core infra ───────────
+  traefik:
+    image: traefik:v3.0
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.le.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.le.acme.storage=/acme/acme.json
+      - --certificatesresolvers.le.acme.dnschallenge=true
+      - --certificatesresolvers.le.acme.dnschallenge.provider=cloudflare
+      # If DNS propagation is slow, uncomment:
+      # - --certificatesresolvers.le.acme.dnschallenge.delaybeforecheck=30
+      # While testing (avoid rate limits), uncomment:
+      # - --certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --log.level=INFO
+    ports:
+      - "443:443"
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-acme:/acme
+    networks: [agentcy]
+
+  couchbase:
+    image: couchbase:community
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210:11210"
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://127.0.0.1:8091/ui/index.html"]
+      interval: 10s
+      timeout: 5s
+      retries: 60
+      start_period: 30s
+    networks: [agentcy]
+
+  couchbase-setup:
+    image: couchbase:community
+    # <-- inject all your CB_* vars
+    env_file:
+      - .env
+    environment:
+      - CB_CONN_STR=couchbase://couchbase:8091
+    # <-- mount only your init script
+    volumes:
+      - ./scripts/init-couchbase.sh:/init-couchbase.sh:ro
+    entrypoint: ["/bin/bash", "/init-couchbase.sh"]
+    depends_on:
+      couchbase:
+        condition: service_healthy
+    restart: "no"
+    networks: [agentcy]
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq
+    healthcheck:
+      # no bash in the image
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks: [agentcy]
+
+  nexus:
+    image: sonatype/nexus3:3.82.0
+    container_name: nexus
+    restart: unless-stopped
+    volumes:
+      - nexus-data:/nexus-data
+    ports:
+      - "8087:8081"
+      - "5001:5001"   # Docker registry port
+
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8081/service/rest/v1/status"]
+      interval: 15s
+      timeout: 5s
+      retries: 40
+    networks: [agentcy]
+
+  nexus-init:
+    image: curlimages/curl:8.8.0
+    container_name: nexus-init
+    depends_on:
+      nexus: { condition: service_healthy }
+    entrypoint: ["/bin/sh", "/init/bootstrap-nexus.sh"]
+    volumes:
+      - ./scripts:/init:ro
+      - nexus-data:/nexus-data:ro
+    environment:
+      - NEXUS_URL=http://nexus:8081
+      - NEW_ADMIN_PASS=${NEXUS_ADMIN_PASS}
+      - PYPI_REPO=${PYPI_REPO}
+      - DOCKER_REPO=${DOCKER_REPO}
+      - NEXUS_DOCKER_PORT=5001
+      - NEXUS_SVC_USER=${NEXUS_USERNAME}
+      - NEXUS_SVC_PASS=${NEXUS_PASSWORD}
+      - NEXUS_SVC_EMAIL=devops@agentcy.com
+      - NEXUS_SVC_RESET=0
+    restart: "no"
+    networks: [agentcy]
+
+  fuseki:
+    image: stain/jena-fuseki:5.1.0
+    container_name: fuseki
+    restart: unless-stopped
+    ports:
+      - "3030:3030"
+    environment:
+      - FUSEKI_DATASET=agentcy
+      - FUSEKI_DATASET_1=agentcy
+      - ADMIN_PASSWORD=${FUSEKI_ADMIN_PASSWORD:-admin}
+    volumes:
+      - fuseki-data:/fuseki
+    networks: [agentcy]
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${PG_USER:-agentcy}
+      - POSTGRES_PASSWORD=${PG_PASS:-agentcy}
+      - POSTGRES_DB=${PG_DB:-agentcy}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init-postgres.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-agentcy}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [agentcy]
+
+  # ─────────── Your services ───────────
+  api_service:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.api   # contains skopeo
+    container_name: api_service
+    depends_on:
+      couchbase: 
+       condition: service_healthy
+      couchbase-setup:   
+       condition: service_completed_successfully
+      rabbitmq:   
+        condition: service_healthy
+      nexus:     
+        condition: service_healthy
+      nexus-init: 
+        condition: service_completed_successfully
+    environment:
+      # Couchbase
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      # RabbitMQ
+      - RABBITMQ_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      # Nexus (PyPI & Registry)
+      - NEXUS_PYPI_URL=http://nexus:8081/repository/${PYPI_REPO}/
+      - NEXUS_USERNAME=${NEXUS_USERNAME}
+      - NEXUS_PASSWORD=${NEXUS_PASSWORD}
+      - NEXUS_REGISTRY=${NEXUS_REGISTRY}
+      - REGISTRY_USERNAME=${NEXUS_USERNAME}
+      - REGISTRY_PASSWORD=${NEXUS_PASSWORD}
+      # Misc
+      - ARTIFACT_MAX_MB=500
+      - LOG_LEVEL=INFO
+      - SERVICE_NAME=api_service
+      # Semantic/KG (Fuseki)
+      - FUSEKI_URL=http://fuseki:3030
+      - FUSEKI_DATASET=agentcy
+      - FUSEKI_ENABLE=1
+      - FUSEKI_USER=admin
+      - FUSEKI_PASSWORD=${FUSEKI_ADMIN_PASSWORD:-admin}
+      # Observability (OTLP → collector → Tempo/Prometheus)
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      # CNP + LLM
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - EVAL_PIPELINE_MODE=${EVAL_PIPELINE_MODE:-full}
+      - COMPLIANCE_AGENT_ENABLE=${COMPLIANCE_AGENT_ENABLE:-1}
+      - SHACL_ENABLE=${SHACL_ENABLE:-1}
+      - SHACL_SHAPES_PATH=${SHACL_SHAPES_PATH:-schemas/plan_draft_shapes.ttl}
+      - PLAN_SHACL_RULESET_PATH=${PLAN_SHACL_RULESET_PATH:-schemas/plan_draft_shacl.json}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - LLM_STUB_MODE=${LLM_STUB_MODE:-0}
+      - LLM_ETHICS_PROVIDER=${LLM_ETHICS_PROVIDER:-}
+      - LLM_STRATEGIST_PROVIDER=${LLM_STRATEGIST_PROVIDER:-}
+      - LLM_STRATEGIST_ENABLE=${LLM_STRATEGIST_ENABLE:-1}
+      - ETHICS_CHECK_ENABLE=${ETHICS_CHECK_ENABLE:-1}
+      - EXECUTION_REQUIRE_ETHICS=${EXECUTION_REQUIRE_ETHICS:-1}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      # Agent registry: no default TTL (agents don't expire)
+      - AGENT_REGISTRY_TTL_SECONDS=0
+    ports:
+      - "8082:8080"
+    command: ["/opt/venv/bin/python","-m","uvicorn","--app-dir","/app/src",
+     "agentcy.api_service.main:create_app","--host","0.0.0.0","--port","8080"]
+    networks: [agentcy]
+
+  orchestrator_core:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.worker
+    container_name: orchestrator_core
+    depends_on:
+      couchbase: 
+        condition: service_healthy
+      couchbase-setup:   
+        condition: service_completed_successfully
+      rabbitmq:  
+        condition: service_healthy
+    environment:
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_SCOPE=${CB_SCOPE}
+      - RABBITMQ_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - LOG_LEVEL=INFO
+      - SERVICE_NAME=orchestrator_core
+      # Docker-based launcher config
+      - AGENT_RUNTIME_IMAGE=${AGENT_RUNTIME_IMAGE}
+      - AGENT_DOCKER_NETWORK=agentcy-stack_agentcy   # <project>_agentcy
+      - AGENT_MEM_LIMIT=512m
+      - AGENT_NANOCPUS=500000000
+      - REGISTRY_USERNAME=${NEXUS_USERNAME}
+      - REGISTRY_PASSWORD=${NEXUS_PASSWORD}
+      - NEXUS_PYPI_URL=http://nexus:8081/repository/${PYPI_REPO}/
+      - NEXUS_USERNAME=${NEXUS_USERNAME}
+      - NEXUS_PASSWORD=${NEXUS_PASSWORD}
+      - NEXUS_REGISTRY=${NEXUS_REGISTRY}
+      - SYSTEM_EXECUTION_MODE=launch
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      # Semantic/KG (Fuseki)
+      - FUSEKI_URL=http://fuseki:3030
+      - FUSEKI_DATASET=agentcy
+      - FUSEKI_ENABLE=1
+      - FUSEKI_USER=admin
+      - FUSEKI_PASSWORD=${FUSEKI_ADMIN_PASSWORD:-admin}
+      # Agent registry (runtime heartbeat)
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=system
+      - AGENT_CAPABILITIES=orchestrator
+      - AGENT_TAGS=core
+      - AGENT_DESCRIPTION=orchestrator_core
+      # CNP manager consumer
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - LLM_STUB_MODE=${LLM_STUB_MODE:-0}
+      - LLM_ETHICS_PROVIDER=${LLM_ETHICS_PROVIDER:-}
+      - LLM_STRATEGIST_PROVIDER=${LLM_STRATEGIST_PROVIDER:-}
+      - LLM_STRATEGIST_ENABLE=${LLM_STRATEGIST_ENABLE:-1}
+      - ETHICS_CHECK_ENABLE=${ETHICS_CHECK_ENABLE:-1}
+      - LLM_STRATEGIST_LOOP=${LLM_STRATEGIST_LOOP:-0}
+      - LLM_STRATEGIST_LOOP_PROVIDER=${LLM_STRATEGIST_LOOP_PROVIDER:-}
+      - EXECUTION_REQUIRE_ETHICS=${EXECUTION_REQUIRE_ETHICS:-1}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - FAILURE_ESCALATION_MAX_RETRIES=${FAILURE_ESCALATION_MAX_RETRIES:-2}
+      - CNP_MAX_REFORWARDS=${CNP_MAX_REFORWARDS:-3}
+      - CNP_FAILURE_REFORWARD=${CNP_FAILURE_REFORWARD:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - EVAL_PIPELINE_MODE=${EVAL_PIPELINE_MODE:-full}
+      - COMPLIANCE_AGENT_ENABLE=${COMPLIANCE_AGENT_ENABLE:-1}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - SHACL_ENABLE=${SHACL_ENABLE:-1}
+      - SHACL_SHAPES_PATH=${SHACL_SHAPES_PATH:-schemas/plan_draft_shapes.ttl}
+      - PLAN_SHACL_RULESET_PATH=${PLAN_SHACL_RULESET_PATH:-schemas/plan_draft_shacl.json}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - RUNTIME_POLICY_ENABLE=${RUNTIME_POLICY_ENABLE:-1}
+      # Observability (OTLP → collector → Tempo/Prometheus)
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    # Let orchestrator launch containers (dev-only; in prod use k8s Jobs)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    command: ["/opt/venv/bin/python","-m","uvicorn","--app-dir","/app/src",
+     "agentcy.orchestrator_core.core_main:app","--host","0.0.0.0",
+     "--port","8001","--workers","1","--proxy-headers"]
+    networks: [agentcy]
+
+  # Optional: keep a base agent image around for manual runs (not auto-started)
+  agent_runtime:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: agent_runtime
+    profiles: ["agents"]        # not started by default
+    environment:
+      - LOG_LEVEL=INFO
+      # Semantic/KG (Fuseki)
+      - FUSEKI_URL=http://fuseki:3030
+      - FUSEKI_DATASET=agentcy
+      - FUSEKI_ENABLE=1
+      - FUSEKI_USER=admin
+      - FUSEKI_PASSWORD=${FUSEKI_ADMIN_PASSWORD:-admin}
+      # Agent registry (runtime heartbeat)
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=system
+      - AGENT_CAPABILITIES=runtime
+      - AGENT_TAGS=agent
+      - AGENT_DESCRIPTION=agent_runtime
+      # Observability (OTLP → collector → Tempo/Prometheus)
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    command: ["sleep","infinity"]
+    networks: [agentcy]
+
+  # ─────────── Business-Domain Agents (OpenAI + Postgres) ───────────
+  call-transcription-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: call-transcription-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "call-transcription",
+             "--entry", "agentcy.demo_agents.nlp_agent:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=transcription,call_analysis,entity_extraction
+      - AGENT_TAGS=business
+      - AGENT_DESCRIPTION=Call Transcription & Analysis Agent
+      - SERVICE_NAME=call-transcription
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_call_transcription
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  deal-summary-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: deal-summary-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "deal-summary",
+             "--entry", "agentcy.demo_agents.data_agent:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=deal_summary,aggregation,email_analysis
+      - AGENT_TAGS=business
+      - AGENT_DESCRIPTION=Deal Summary Agent
+      - SERVICE_NAME=deal-summary
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_deal_summary
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  client-necessity-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: client-necessity-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "client-necessity-form",
+             "--entry", "agentcy.demo_agents.ml_agent:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=form_filling,client_analysis,requirement_gathering
+      - AGENT_TAGS=business
+      - AGENT_DESCRIPTION=Client Necessity Form Agent
+      - SERVICE_NAME=client-necessity-form
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_client_necessity
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  proposal-template-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: proposal-template-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "proposal-template",
+             "--entry", "agentcy.demo_agents.reporting_agent:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=proposal_generation,deal_proposal,document_generation
+      - AGENT_TAGS=business
+      - AGENT_DESCRIPTION=Proposal Template Agent
+      - SERVICE_NAME=proposal-template
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_proposal_template
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  # ─────────── Regional Warehouse Agents (compete via CNP) ───────────
+  warehouse-agent-north:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: warehouse-agent-north
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "warehouse-north",
+             "--entry", "agentcy.demo_agents.warehouse_agent_north:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=warehouse_matching,recommendation,location_analysis
+      - AGENT_TAGS=business,northern_europe
+      - AGENT_DESCRIPTION=Warehouse Suggestion Agent - Northern Europe
+      - SERVICE_NAME=warehouse-north
+      - WAREHOUSE_REGION_FILTER=Vastra Gotaland
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_warehouse_north
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  warehouse-agent-central:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: warehouse-agent-central
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "warehouse-central",
+             "--entry", "agentcy.demo_agents.warehouse_agent_central:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=warehouse_matching,recommendation,location_analysis
+      - AGENT_TAGS=business,central_europe
+      - AGENT_DESCRIPTION=Warehouse Suggestion Agent - Central Europe
+      - SERVICE_NAME=warehouse-central
+      - WAREHOUSE_REGION_FILTER=Bavaria,Baden-Wurttemberg,Ile-de-France,Auvergne-Rhone-Alpes
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_warehouse_central
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  warehouse-agent-south:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: warehouse-agent-south
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "warehouse-south",
+             "--entry", "agentcy.demo_agents.warehouse_agent_south:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=warehouse_matching,recommendation,location_analysis
+      - AGENT_TAGS=business,southern_europe
+      - AGENT_DESCRIPTION=Warehouse Suggestion Agent - Southern Europe
+      - SERVICE_NAME=warehouse-south
+      - WAREHOUSE_REGION_FILTER=Lombardy,Emilia-Romagna,Lazio
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_warehouse_south
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  # ─────────── Estimator Agents (compete via CNP) ───────────
+  cost-estimator-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: cost-estimator-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "cost-estimator",
+             "--entry", "agentcy.demo_agents.cost_estimator:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=deal_estimation,financial_analysis
+      - AGENT_TAGS=business,cost
+      - AGENT_DESCRIPTION=Cost Estimation Agent - Total Cost of Occupancy
+      - SERVICE_NAME=cost-estimator
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_cost_estimator
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  speed-estimator-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: speed-estimator-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "speed-estimator",
+             "--entry", "agentcy.demo_agents.speed_estimator:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=deal_estimation,timeline_analysis
+      - AGENT_TAGS=business,speed
+      - AGENT_DESCRIPTION=Speed Estimation Agent - Time to Operational
+      - SERVICE_NAME=speed-estimator
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_speed_estimator
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  # ─────────── Compliance Agent (no LLM) ───────────
+  compliance-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: compliance-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "compliance-check",
+             "--entry", "agentcy.demo_agents.compliance_agent:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_ASSIGNMENT_BASELINE=${AGENT_ASSIGNMENT_BASELINE:-direct}
+      - PHEROMONE_ENABLE=${PHEROMONE_ENABLE:-1}
+      - CNP_BID_TTL_SECONDS=${CNP_BID_TTL_SECONDS:-86400}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=compliance_check,safety_validation
+      - AGENT_TAGS=business,compliance
+      - AGENT_DESCRIPTION=Compliance Validation Agent - Domain Rule Enforcement
+      - SERVICE_NAME=compliance-check
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_compliance
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  # ─────────── Coordination / Validation Agents ───────────
+  graph-builder-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: graph-builder-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "graph_builder",
+             "--entry", "agentcy.agent_runtime.services.graph_builder:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=graph_builder,plan_graph
+      - AGENT_TAGS=coordination,validation
+      - AGENT_DESCRIPTION=Graph Builder Agent
+      - SERVICE_NAME=graph_builder
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_graph_builder
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - FUSEKI_URL=http://fuseki:3030
+      - FUSEKI_DATASET=agentcy
+      - FUSEKI_ENABLE=1
+      - FUSEKI_USER=admin
+      - FUSEKI_PASSWORD=${FUSEKI_ADMIN_PASSWORD:-admin}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  plan-validator-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: plan-validator-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "plan_validator",
+             "--entry", "agentcy.agent_runtime.services.plan_validator:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - SHACL_ENABLE=${SHACL_ENABLE:-1}
+      - SHACL_SHAPES_PATH=${SHACL_SHAPES_PATH:-schemas/plan_draft_shapes.ttl}
+      - PLAN_SHACL_RULESET_PATH=${PLAN_SHACL_RULESET_PATH:-schemas/plan_draft_shacl.json}
+      - LLM_PLAN_VALIDATOR_PROVIDER=${LLM_PLAN_VALIDATOR_PROVIDER:-}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=plan_validator,shacl_validation
+      - AGENT_TAGS=coordination,validation
+      - AGENT_DESCRIPTION=Plan Validator Agent
+      - SERVICE_NAME=plan_validator
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_plan_validator
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - FUSEKI_URL=http://fuseki:3030
+      - FUSEKI_DATASET=agentcy
+      - FUSEKI_ENABLE=1
+      - FUSEKI_USER=admin
+      - FUSEKI_PASSWORD=${FUSEKI_ADMIN_PASSWORD:-admin}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  plan-cache-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: plan-cache-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "plan_cache",
+             "--entry", "agentcy.agent_runtime.services.plan_cache:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=plan_cache,plan_storage
+      - AGENT_TAGS=coordination,cache
+      - AGENT_DESCRIPTION=Plan Cache Agent
+      - SERVICE_NAME=plan_cache
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_plan_cache
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  llm-strategist-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: llm-strategist-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "llm_strategist",
+             "--entry", "agentcy.agent_runtime.services.llm_strategist:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - LLM_STRATEGIST_ENABLE=${LLM_STRATEGIST_ENABLE:-1}
+      - LLM_STRATEGIST_PROVIDER=${LLM_STRATEGIST_PROVIDER:-}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=llm_strategist,execution_strategy
+      - AGENT_TAGS=coordination,strategy
+      - AGENT_DESCRIPTION=LLM Strategist Agent
+      - SERVICE_NAME=llm_strategist
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_llm_strategist
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  ethics-checker-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: ethics-checker-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "ethics_checker",
+             "--entry", "agentcy.agent_runtime.services.ethics_checker:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - ETHICS_CHECK_ENABLE=${ETHICS_CHECK_ENABLE:-1}
+      - EXECUTION_REQUIRE_ETHICS=${EXECUTION_REQUIRE_ETHICS:-1}
+      - LLM_STUB_MODE=${LLM_STUB_MODE:-0}
+      - LLM_ETHICS_PROVIDER=${LLM_ETHICS_PROVIDER:-}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=ethics_checker,policy_enforcement
+      - AGENT_TAGS=coordination,ethics
+      - AGENT_DESCRIPTION=Ethics Checker Agent
+      - SERVICE_NAME=ethics_checker
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_ethics_checker
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  email-drafting-agent:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.runtime
+    container_name: email-drafting-agent
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      couchbase: { condition: service_healthy }
+      couchbase-setup: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    command: ["/opt/venv/bin/python", "-m", "agentcy.agent_runtime.cli",
+             "--service-name", "email-drafting",
+             "--entry", "agentcy.demo_agents.email_agent:run"]
+    environment:
+      - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://${PG_USER:-agentcy}:${PG_PASS:-agentcy}@postgres:5432/${PG_DB:-agentcy}
+      - CB_CONN_STR=couchbase://couchbase
+      - CB_USER=${CB_USER}
+      - CB_PASS=${CB_PASS}
+      - CB_BUCKET=${CB_BUCKET}
+      - CB_BUCKET_EPHEMERAL=${CB_BUCKET_EPHEMERAL}
+      - CB_SCOPE=${CB_SCOPE}
+      - AGENT_RUNTIME_CB=1
+      - AGENT_RUNTIME_EPHEMERAL_CB=1
+      - PIPELINE_RUN_SUFFIX=${PIPELINE_RUN_SUFFIX:-1}
+      - CNP_MANAGER_ENABLE=${CNP_MANAGER_ENABLE:-1}
+      - AGENT_REGISTRY_URL=http://api_service:8080
+      - AGENT_REGISTRY_USERNAME=${AGENT_REGISTRY_USERNAME:-default}
+      - AGENT_CAPABILITIES=email_drafting,client_communication,follow_up
+      - AGENT_TAGS=business
+      - AGENT_DESCRIPTION=Email / Communication Drafting Agent
+      - SERVICE_NAME=email-drafting
+      - PIPELINE_EVENTS_QUEUE=pipeline_events_email_drafting
+      - AGENT_REGISTRY_TTL_SECONDS=0
+      - LOG_LEVEL=INFO
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+    networks: [agentcy]
+
+  # ─────────── Frontend ───────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - api_service
+    networks: [agentcy]
+
+  # ─────────── Observability stack ───────────
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.96.0
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector.yml"]
+    volumes:
+      - ./observability/otel-collector.yml:/etc/otel-collector.yml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "8889:8889"   # Prometheus scrape
+    networks: [agentcy]
+
+  tempo:
+    image: grafana/tempo:2.4.1
+    container_name: tempo
+    command: ["-config.file=/etc/tempo.yml"]
+    volumes:
+      - ./observability/tempo.yml:/etc/tempo.yml:ro
+      - tempo-data:/tempo
+    ports:
+      - "3200:3200"
+    networks: [agentcy]
+
+  loki:
+    image: grafana/loki:2.9.4
+    container_name: loki
+    command: ["-config.file=/etc/loki.yml"]
+    volumes:
+      - ./observability/loki.yml:/etc/loki.yml:ro
+      - loki-data:/loki
+    ports:
+      - "3100:3100"
+    networks: [agentcy]
+
+  promtail:
+    image: grafana/promtail:2.9.4
+    container_name: promtail
+    command: ["-config.file=/etc/promtail.yml"]
+    volumes:
+      - ./observability/promtail.yml:/etc/promtail.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    depends_on:
+      - loki
+    networks: [agentcy]
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: prometheus
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks: [agentcy]
+
+  grafana:
+    image: grafana/grafana:10.4.1
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    networks: [agentcy]

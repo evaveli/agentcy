@@ -1,0 +1,46 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="agentcy",
+    version="0.1.0",
+    description="A dynamic scalable pipeline orchestrator",
+    author="Your Name",
+    author_email="skenderixhulio@gmail.com",
+    url="https://gitlab.com/theagentcy/orchestrator", 
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
+    py_modules=["main", "router"],
+    install_requires=[
+        "pydantic>=2.10.5",
+        "pydantic-extra-types>=2.2.0",
+        "pydantic-settings>=2.1.0",
+        "pydantic_core>=2.27.2",
+        "py-consul>=1.5.1",
+        "fastapi>=0.104.1",
+        "openai>=1.59.9",
+        "ollama>=0.4.6",
+        "aiohttp>=3.8.5",
+        "Jinja2>=3.1.2",
+        "PyYAML>=6.0.1",
+        "yamllint>=1.35.1",
+        "httpx>=0.27.2",
+        "urllib3>=2.0.7",
+        "fastjsonschema>=2.20.0",
+        "jsonschema==4.23.0",
+        "jsonschema-specifications==2024.10.1",
+        "aio-pika>=9.5.4",
+        "pyshacl>=0.26.0",
+        "rdflib>=7.0.0",
+        "uvicorn>=0.24.0.post1", 
+    ],
+    entry_points={
+        "console_scripts": [
+            "run-orchestrator = agentcy.main:run_app",
+        ],
+    },
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.7",
+)

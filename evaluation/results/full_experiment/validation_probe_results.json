@@ -1,0 +1,95 @@
+[
+  {
+    "defect": "S1: Missing assigned agent",
+    "class": "Structural",
+    "shacl_catches": true,
+    "compliance_catches": false,
+    "shacl_messages": [
+      "Less than 1 values on <http://agentcy.ai/resource/task/probe-test/t1>->ac:assignedAgent",
+      "Warehouse assignments must pass compliance validation before proposal",
+      "Warehouse assignments must pass compliance validation before proposal"
+    ]
+  },
+  {
+    "defect": "S2: Empty capabilities",
+    "class": "Structural",
+    "shacl_catches": true,
+    "compliance_catches": false,
+    "shacl_messages": [
+      "Less than 1 values on <http://agentcy.ai/resource/task/probe-test/t1>->ac:requiresCapability",
+      "Warehouse assignments must pass compliance validation before proposal",
+      "Warehouse assignments must pass compliance validation before proposal"
+    ]
+  },
+  {
+    "defect": "S3: Missing description",
+    "class": "Structural",
+    "shacl_catches": true,
+    "compliance_catches": false,
+    "shacl_messages": [
+      "Warehouse assignments must pass compliance validation before proposal"
+    ]
+  },
+  {
+    "defect": "S4: Hazmat task without approval",
+    "class": "Structural",
+    "shacl_catches": true,
+    "compliance_catches": false,
+    "shacl_messages": [
+      "Critical deals must be flagged as high risk in the task specification",
+      "Hazmat warehouse assignment requires human approval",
+      "Warehouse assignments must pass compliance validation before proposal",
+      "Warehouse assignments must pass compliance validation before proposal"
+    ]
+  },
+  {
+    "defect": "S5: Cold storage task without temp range",
+    "class": "Structural",
+    "shacl_catches": true,
+    "compliance_catches": false,
+    "shacl_messages": [
+      "Cold storage tasks must specify required temperature range",
+      "Warehouse assignments must pass compliance validation before proposal",
+      "Warehouse assignments must pass compliance validation before proposal"
+    ]
+  },
+  {
+    "defect": "S6: Critical deal without high risk",
+    "class": "Structural",
+    "shacl_catches": true,
+    "compliance_catches": false,
+    "shacl_messages": [
+      "Critical deals must be flagged as high risk in the task specification",
+      "Warehouse assignments must pass compliance validation before proposal",
+      "Warehouse assignments must pass compliance validation before proposal"
+    ]
+  },
+  {
+    "defect": "D1: FreshCo \u2192 Bavaria (no cold storage)",
+    "class": "Domain",
+    "shacl_catches": false,
+    "compliance_catches": true,
+    "shacl_messages": []
+  },
+  {
+    "defect": "D2: GreenLeaf \u2192 Centro Bologna (no hazmat, standard security)",
+    "class": "Domain",
+    "shacl_catches": false,
+    "compliance_catches": true,
+    "shacl_messages": []
+  },
+  {
+    "defect": "D3: GreenLeaf \u2192 LogisPark Milano (no hazmat)",
+    "class": "Domain",
+    "shacl_catches": false,
+    "compliance_catches": true,
+    "shacl_messages": []
+  },
+  {
+    "defect": "D4: QuickShip \u2192 PharmaStore Lyon (valid pairing)",
+    "class": "Control",
+    "shacl_catches": false,
+    "compliance_catches": false,
+    "shacl_messages": []
+  }
+]

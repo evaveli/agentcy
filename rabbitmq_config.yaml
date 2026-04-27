@@ -1,0 +1,1652 @@
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: pipeline_entry_a2291eb9-5732-4f01-84bb-05ea98e864bc
+spec:
+  name: "pipeline_entry_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_register_agents
+spec:
+  name: "exchange_register_agents"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_validate_input
+spec:
+  name: "exchange_validate_input"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_supervisor_agent
+spec:
+  name: "exchange_supervisor_agent"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_path_seeding
+spec:
+  name: "exchange_path_seeding"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_blueprint_bid
+spec:
+  name: "exchange_blueprint_bid"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_graph_builder
+spec:
+  name: "exchange_graph_builder"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_shacl_validation
+spec:
+  name: "exchange_shacl_validation"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_plan_cache
+spec:
+  name: "exchange_plan_cache"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_human_validation
+spec:
+  name: "exchange_human_validation"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_llm_strategist
+spec:
+  name: "exchange_llm_strategist"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_system_execution
+spec:
+  name: "exchange_system_execution"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_ethics_check
+spec:
+  name: "exchange_ethics_check"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_failure_escalation
+spec:
+  name: "exchange_failure_escalation"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_pheromone_feedback
+spec:
+  name: "exchange_pheromone_feedback"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_audit_and_trace
+spec:
+  name: "exchange_audit_and_trace"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: exchange_pipeline_entry_a2291eb9-5732-4f01-84bb-05ea98e864bc
+spec:
+  name: "exchange_pipeline_entry_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  vhost: "agentcy"
+  type: "direct"
+  durable: true
+---
+
+
+
+
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc
+spec:
+  name: "pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_register_agents_to_validate_input
+spec:
+  name: "dlx_queue_register_agents_to_validate_input"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_register_agents_to_validate_input_dlq
+spec:
+  name: "queue_register_agents_to_validate_input_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_register_agents_to_validate_input
+spec:
+  name: "queue_register_agents_to_validate_input"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_register_agents_to_validate_input"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_validate_input_to_supervisor_agent
+spec:
+  name: "dlx_queue_validate_input_to_supervisor_agent"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_validate_input_to_supervisor_agent_dlq
+spec:
+  name: "queue_validate_input_to_supervisor_agent_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_validate_input_to_supervisor_agent
+spec:
+  name: "queue_validate_input_to_supervisor_agent"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_validate_input_to_supervisor_agent"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_register_agents_to_path_seeding
+spec:
+  name: "dlx_queue_register_agents_to_path_seeding"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_register_agents_to_path_seeding_dlq
+spec:
+  name: "queue_register_agents_to_path_seeding_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_register_agents_to_path_seeding
+spec:
+  name: "queue_register_agents_to_path_seeding"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_register_agents_to_path_seeding"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_supervisor_agent_to_blueprint_bid
+spec:
+  name: "dlx_queue_supervisor_agent_to_blueprint_bid"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_supervisor_agent_to_blueprint_bid_dlq
+spec:
+  name: "queue_supervisor_agent_to_blueprint_bid_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_supervisor_agent_to_blueprint_bid
+spec:
+  name: "queue_supervisor_agent_to_blueprint_bid"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_supervisor_agent_to_blueprint_bid"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_path_seeding_to_graph_builder
+spec:
+  name: "dlx_queue_path_seeding_to_graph_builder"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_path_seeding_to_graph_builder_dlq
+spec:
+  name: "queue_path_seeding_to_graph_builder_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_path_seeding_to_graph_builder
+spec:
+  name: "queue_path_seeding_to_graph_builder"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_path_seeding_to_graph_builder"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_blueprint_bid_to_graph_builder
+spec:
+  name: "dlx_queue_blueprint_bid_to_graph_builder"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_blueprint_bid_to_graph_builder_dlq
+spec:
+  name: "queue_blueprint_bid_to_graph_builder_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_blueprint_bid_to_graph_builder
+spec:
+  name: "queue_blueprint_bid_to_graph_builder"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_blueprint_bid_to_graph_builder"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_graph_builder_to_shacl_validation
+spec:
+  name: "dlx_queue_graph_builder_to_shacl_validation"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_graph_builder_to_shacl_validation_dlq
+spec:
+  name: "queue_graph_builder_to_shacl_validation_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_graph_builder_to_shacl_validation
+spec:
+  name: "queue_graph_builder_to_shacl_validation"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_graph_builder_to_shacl_validation"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_shacl_validation_to_plan_cache
+spec:
+  name: "dlx_queue_shacl_validation_to_plan_cache"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_shacl_validation_to_plan_cache_dlq
+spec:
+  name: "queue_shacl_validation_to_plan_cache_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_shacl_validation_to_plan_cache
+spec:
+  name: "queue_shacl_validation_to_plan_cache"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_shacl_validation_to_plan_cache"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_plan_cache_to_human_validation
+spec:
+  name: "dlx_queue_plan_cache_to_human_validation"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_plan_cache_to_human_validation_dlq
+spec:
+  name: "queue_plan_cache_to_human_validation_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_plan_cache_to_human_validation
+spec:
+  name: "queue_plan_cache_to_human_validation"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_plan_cache_to_human_validation"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_human_validation_to_llm_strategist
+spec:
+  name: "dlx_queue_human_validation_to_llm_strategist"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_human_validation_to_llm_strategist_dlq
+spec:
+  name: "queue_human_validation_to_llm_strategist_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_human_validation_to_llm_strategist
+spec:
+  name: "queue_human_validation_to_llm_strategist"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_human_validation_to_llm_strategist"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_llm_strategist_to_ethics_check
+spec:
+  name: "dlx_queue_llm_strategist_to_ethics_check"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_llm_strategist_to_ethics_check_dlq
+spec:
+  name: "queue_llm_strategist_to_ethics_check_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_llm_strategist_to_ethics_check
+spec:
+  name: "queue_llm_strategist_to_ethics_check"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_llm_strategist_to_ethics_check"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_llm_strategist_to_system_execution
+spec:
+  name: "dlx_queue_llm_strategist_to_system_execution"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_llm_strategist_to_system_execution_dlq
+spec:
+  name: "queue_llm_strategist_to_system_execution_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_llm_strategist_to_system_execution
+spec:
+  name: "queue_llm_strategist_to_system_execution"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_llm_strategist_to_system_execution"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_system_execution_to_pheromone_feedback
+spec:
+  name: "dlx_queue_system_execution_to_pheromone_feedback"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_system_execution_to_pheromone_feedback_dlq
+spec:
+  name: "queue_system_execution_to_pheromone_feedback_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_system_execution_to_pheromone_feedback
+spec:
+  name: "queue_system_execution_to_pheromone_feedback"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_system_execution_to_pheromone_feedback"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_system_execution_to_failure_escalation
+spec:
+  name: "dlx_queue_system_execution_to_failure_escalation"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_system_execution_to_failure_escalation_dlq
+spec:
+  name: "queue_system_execution_to_failure_escalation_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_system_execution_to_failure_escalation
+spec:
+  name: "queue_system_execution_to_failure_escalation"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_system_execution_to_failure_escalation"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_system_execution_to_audit_and_trace
+spec:
+  name: "dlx_queue_system_execution_to_audit_and_trace"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_system_execution_to_audit_and_trace_dlq
+spec:
+  name: "queue_system_execution_to_audit_and_trace_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_system_execution_to_audit_and_trace
+spec:
+  name: "queue_system_execution_to_audit_and_trace"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_system_execution_to_audit_and_trace"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_ethics_check_to_audit_and_trace
+spec:
+  name: "dlx_queue_ethics_check_to_audit_and_trace"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_ethics_check_to_audit_and_trace_dlq
+spec:
+  name: "queue_ethics_check_to_audit_and_trace_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_ethics_check_to_audit_and_trace
+spec:
+  name: "queue_ethics_check_to_audit_and_trace"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_ethics_check_to_audit_and_trace"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_failure_escalation_to_audit_and_trace
+spec:
+  name: "dlx_queue_failure_escalation_to_audit_and_trace"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_failure_escalation_to_audit_and_trace_dlq
+spec:
+  name: "queue_failure_escalation_to_audit_and_trace_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_failure_escalation_to_audit_and_trace
+spec:
+  name: "queue_failure_escalation_to_audit_and_trace"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_failure_escalation_to_audit_and_trace"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_queue_pheromone_feedback_to_audit_and_trace
+spec:
+  name: "dlx_queue_pheromone_feedback_to_audit_and_trace"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_pheromone_feedback_to_audit_and_trace_dlq
+spec:
+  name: "queue_pheromone_feedback_to_audit_and_trace_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue_pheromone_feedback_to_audit_and_trace
+spec:
+  name: "queue_pheromone_feedback_to_audit_and_trace"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_queue_pheromone_feedback_to_audit_and_trace"
+    
+  
+---
+
+
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: dlx_pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc
+spec:
+  name: "dlx_pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  vhost: "agentcy"
+  type: "fanout"
+  durable: true
+  
+---
+
+
+
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc_dlq
+spec:
+  name: "pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc_dlq"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+---
+
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc
+spec:
+  name: "pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  vhost: "agentcy"
+  durable: true
+  type: "queue"
+  
+  arguments:
+    
+    x-dead-letter-exchange: "dlx_pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+    
+  
+---
+
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_entry_to_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc
+spec:
+  vhost: "agentcy"
+  source: "pipeline_entry_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  destination: "pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  destinationType: "queue"
+  routingKey: "start"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_register_agents_queue_register_agents_to_validate_input
+spec:
+  vhost: "agentcy"
+  source: "exchange_register_agents"
+  destination: "queue_register_agents_to_validate_input"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_validate_input_queue_validate_input_to_supervisor_agent
+spec:
+  vhost: "agentcy"
+  source: "exchange_validate_input"
+  destination: "queue_validate_input_to_supervisor_agent"
+  destinationType: "queue"
+  routingKey: "queue_validate_input_to_supervisor_agent"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_register_agents_queue_register_agents_to_path_seeding
+spec:
+  vhost: "agentcy"
+  source: "exchange_register_agents"
+  destination: "queue_register_agents_to_path_seeding"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_supervisor_agent_queue_supervisor_agent_to_blueprint_bid
+spec:
+  vhost: "agentcy"
+  source: "exchange_supervisor_agent"
+  destination: "queue_supervisor_agent_to_blueprint_bid"
+  destinationType: "queue"
+  routingKey: "queue_supervisor_agent_to_blueprint_bid"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_path_seeding_queue_path_seeding_to_graph_builder
+spec:
+  vhost: "agentcy"
+  source: "exchange_path_seeding"
+  destination: "queue_path_seeding_to_graph_builder"
+  destinationType: "queue"
+  routingKey: "queue_path_seeding_to_graph_builder"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_blueprint_bid_queue_blueprint_bid_to_graph_builder
+spec:
+  vhost: "agentcy"
+  source: "exchange_blueprint_bid"
+  destination: "queue_blueprint_bid_to_graph_builder"
+  destinationType: "queue"
+  routingKey: "queue_blueprint_bid_to_graph_builder"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_graph_builder_queue_graph_builder_to_shacl_validation
+spec:
+  vhost: "agentcy"
+  source: "exchange_graph_builder"
+  destination: "queue_graph_builder_to_shacl_validation"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-graph_builder-a2291eb9-5732-4f01-84bb-05ea98e864bc"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_shacl_validation_queue_shacl_validation_to_plan_cache
+spec:
+  vhost: "agentcy"
+  source: "exchange_shacl_validation"
+  destination: "queue_shacl_validation_to_plan_cache"
+  destinationType: "queue"
+  routingKey: "queue_shacl_validation_to_plan_cache"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_plan_cache_queue_plan_cache_to_human_validation
+spec:
+  vhost: "agentcy"
+  source: "exchange_plan_cache"
+  destination: "queue_plan_cache_to_human_validation"
+  destinationType: "queue"
+  routingKey: "queue_plan_cache_to_human_validation"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_human_validation_queue_human_validation_to_llm_strategist
+spec:
+  vhost: "agentcy"
+  source: "exchange_human_validation"
+  destination: "queue_human_validation_to_llm_strategist"
+  destinationType: "queue"
+  routingKey: "queue_human_validation_to_llm_strategist"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_llm_strategist_queue_llm_strategist_to_ethics_check
+spec:
+  vhost: "agentcy"
+  source: "exchange_llm_strategist"
+  destination: "queue_llm_strategist_to_ethics_check"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_llm_strategist_queue_llm_strategist_to_system_execution
+spec:
+  vhost: "agentcy"
+  source: "exchange_llm_strategist"
+  destination: "queue_llm_strategist_to_system_execution"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_system_execution_queue_system_execution_to_pheromone_feedback
+spec:
+  vhost: "agentcy"
+  source: "exchange_system_execution"
+  destination: "queue_system_execution_to_pheromone_feedback"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_system_execution_queue_system_execution_to_failure_escalation
+spec:
+  vhost: "agentcy"
+  source: "exchange_system_execution"
+  destination: "queue_system_execution_to_failure_escalation"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_system_execution_queue_system_execution_to_audit_and_trace
+spec:
+  vhost: "agentcy"
+  source: "exchange_system_execution"
+  destination: "queue_system_execution_to_audit_and_trace"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_audit_and_trace_queue_system_execution_to_audit_and_trace
+spec:
+  vhost: "agentcy"
+  source: "exchange_audit_and_trace"
+  destination: "queue_system_execution_to_audit_and_trace"
+  destinationType: "queue"
+  routingKey: ""
+  
+  arguments:
+    
+    correlation_id: "corr-audit_and_trace-a2291eb9-5732-4f01-84bb-05ea98e864bc"
+    
+    timeout: "300"
+    
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_ethics_check_queue_ethics_check_to_audit_and_trace
+spec:
+  vhost: "agentcy"
+  source: "exchange_ethics_check"
+  destination: "queue_ethics_check_to_audit_and_trace"
+  destinationType: "queue"
+  routingKey: "queue_ethics_check_to_audit_and_trace"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_failure_escalation_queue_failure_escalation_to_audit_and_trace
+spec:
+  vhost: "agentcy"
+  source: "exchange_failure_escalation"
+  destination: "queue_failure_escalation_to_audit_and_trace"
+  destinationType: "queue"
+  routingKey: "queue_failure_escalation_to_audit_and_trace"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_pheromone_feedback_queue_pheromone_feedback_to_audit_and_trace
+spec:
+  vhost: "agentcy"
+  source: "exchange_pheromone_feedback"
+  destination: "queue_pheromone_feedback_to_audit_and_trace"
+  destinationType: "queue"
+  routingKey: "queue_pheromone_feedback_to_audit_and_trace"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_entry_pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc
+spec:
+  vhost: "agentcy"
+  source: "pipeline_entry_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  destination: "pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  destinationType: "queue"
+  routingKey: "pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_register_agents_to_validate_input_to_queue_register_agents_to_validate_input_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_register_agents_to_validate_input"
+  destination: "queue_register_agents_to_validate_input_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_validate_input_to_supervisor_agent_to_queue_validate_input_to_supervisor_agent_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_validate_input_to_supervisor_agent"
+  destination: "queue_validate_input_to_supervisor_agent_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_register_agents_to_path_seeding_to_queue_register_agents_to_path_seeding_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_register_agents_to_path_seeding"
+  destination: "queue_register_agents_to_path_seeding_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_supervisor_agent_to_blueprint_bid_to_queue_supervisor_agent_to_blueprint_bid_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_supervisor_agent_to_blueprint_bid"
+  destination: "queue_supervisor_agent_to_blueprint_bid_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_path_seeding_to_graph_builder_to_queue_path_seeding_to_graph_builder_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_path_seeding_to_graph_builder"
+  destination: "queue_path_seeding_to_graph_builder_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_blueprint_bid_to_graph_builder_to_queue_blueprint_bid_to_graph_builder_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_blueprint_bid_to_graph_builder"
+  destination: "queue_blueprint_bid_to_graph_builder_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_graph_builder_to_shacl_validation_to_queue_graph_builder_to_shacl_validation_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_graph_builder_to_shacl_validation"
+  destination: "queue_graph_builder_to_shacl_validation_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_shacl_validation_to_plan_cache_to_queue_shacl_validation_to_plan_cache_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_shacl_validation_to_plan_cache"
+  destination: "queue_shacl_validation_to_plan_cache_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_plan_cache_to_human_validation_to_queue_plan_cache_to_human_validation_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_plan_cache_to_human_validation"
+  destination: "queue_plan_cache_to_human_validation_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_human_validation_to_llm_strategist_to_queue_human_validation_to_llm_strategist_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_human_validation_to_llm_strategist"
+  destination: "queue_human_validation_to_llm_strategist_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_llm_strategist_to_ethics_check_to_queue_llm_strategist_to_ethics_check_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_llm_strategist_to_ethics_check"
+  destination: "queue_llm_strategist_to_ethics_check_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_llm_strategist_to_system_execution_to_queue_llm_strategist_to_system_execution_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_llm_strategist_to_system_execution"
+  destination: "queue_llm_strategist_to_system_execution_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_system_execution_to_pheromone_feedback_to_queue_system_execution_to_pheromone_feedback_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_system_execution_to_pheromone_feedback"
+  destination: "queue_system_execution_to_pheromone_feedback_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_system_execution_to_failure_escalation_to_queue_system_execution_to_failure_escalation_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_system_execution_to_failure_escalation"
+  destination: "queue_system_execution_to_failure_escalation_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_system_execution_to_audit_and_trace_to_queue_system_execution_to_audit_and_trace_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_system_execution_to_audit_and_trace"
+  destination: "queue_system_execution_to_audit_and_trace_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_ethics_check_to_audit_and_trace_to_queue_ethics_check_to_audit_and_trace_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_ethics_check_to_audit_and_trace"
+  destination: "queue_ethics_check_to_audit_and_trace_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_failure_escalation_to_audit_and_trace_to_queue_failure_escalation_to_audit_and_trace_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_failure_escalation_to_audit_and_trace"
+  destination: "queue_failure_escalation_to_audit_and_trace_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_queue_pheromone_feedback_to_audit_and_trace_to_queue_pheromone_feedback_to_audit_and_trace_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_queue_pheromone_feedback_to_audit_and_trace"
+  destination: "queue_pheromone_feedback_to_audit_and_trace_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---
+
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding_dlx_pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc_to_pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc_dlq
+spec:
+  vhost: "agentcy"
+  source: "dlx_pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc"
+  destination: "pipeline_entry_queue_a2291eb9-5732-4f01-84bb-05ea98e864bc_dlq"
+  destinationType: "queue"
+  routingKey: ""
+  
+---

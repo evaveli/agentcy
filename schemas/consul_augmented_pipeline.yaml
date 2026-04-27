@@ -1,0 +1,420 @@
+pipeline_id: "pipeline-5cede6f1-fce7-44a6-a1ac-ba8b5e229128"
+name: "User Onboarding DAG"
+description: "Handles user registration, sends welcome emails, assigns roles, sets up profiles, sends verification emails, and logs onboarding events with complex dependencies."
+project_name: "Name of the project"
+# Consul Configuration Section
+consul:
+  host: "consul-server.example.com"
+  port: 8500
+  datacenter: "dc1"  # Optional: Specify if using multiple datacenters
+  scheme: "http"      # or "https" if using TLS
+  token: "your-consul-token"  # Optional: For ACL-enabled Consul
+
+# RabbitMQ Configuration Section (No Explicit Exchange Types)
+rabbitmq:
+  cluster:
+    nodes: "4"
+    vhost: "/"  # Virtual host to use
+
+  queues:
+    - name: "user_creation_queue"
+      durable: true
+      auto_delete: false
+      
+    - name: "email_notification_queue"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 3
+
+    - name: "analytics_logging_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 3
+
+    - name: "role_assignment_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 3
+
+    - name: "profile_setup_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 3
+
+    - name: "verification_email_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 3
+
+  publishers:
+    - name: "user_service_publisher"
+      routing_key: "user.create"
+
+    - name: "email_service_publisher"
+      routing_key: "user.created.email"
+
+    - name: "analytics_service_publisher"
+      routing_key: "user.created.analytics"
+
+    - name: "role_service_publisher"
+      routing_key: "user.assign.role"
+
+    - name: "profile_service_publisher"
+      routing_key: "user.setup.profile"
+
+    - name: "verification_service_publisher"
+      routing_key: "user.send.verification.email"
+
+  subscribers:
+    - name: "user_service_subscriber"
+      queue: "user_creation_queue"
+      consumer_tag: "user_service_consumer"
+
+    - name: "email_service_subscriber"
+      queue: "email_notification_queue"
+      consumer_tag: "email_service_consumer"
+
+    - name: "analytics_service_subscriber"
+      queue: "analytics_logging_queue"
+      consumer_tag: "analytics_service_consumer"
+
+    - name: "role_service_subscriber"
+      queue: "role_assignment_queue"
+      consumer_tag: "role_service_consumer"
+
+    - name: "profile_service_subscriber"
+      queue: "profile_setup_queue"
+      consumer_tag: "profile_service_consumer"
+
+    - name: "verification_service_subscriber"
+      queue: "verification_email_queue"
+      consumer_tag: "verification_service_consumer"
+
+# DAG Structure Section
+dag:
+  tasks:
+    - id: "step1"
+      name: "Create User"
+      service_name: "user_service"
+      action: "create_user"
+      description: "Creates a new user account."
+      inputs:
+        user_data: "{{ trigger.input.user_data }}"
+      outputs:
+        user_id: "{{ user_id }}"
+        email: "{{ email }}"
+      rabbitmq:
+        publisher: "user_service_publisher"
+      dependencies: []
+
+    - id: "step2"
+      name: "Send Welcome Email"
+      service_name: "email_service"
+      action: "send_email"
+      description: "Sends a welcome email to the newly created user."
+      inputs:
+        email: "{{ step1.outputs.email }}"
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        email_status: "{{ email_status }}"
+      rabbitmq:
+        subscriber: "email_service_subscriber"
+        publisher: "email_service_publisher"
+      dependencies:
+        - "step1"
+
+    - id: "step3"
+      name: "Log User Onboarding"
+      service_name: "analytics_service"
+      action: "log_onboarding"
+      description: "Logs the onboarding event for analytics."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+        timestamp: "{{ current_time }}"
+      outputs:
+        log_status: "{{ log_status }}"
+      rabbitmq:
+        subscriber: "analytics_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step4"
+      name: "Assign User Role"
+      service_name: "role_service"
+      action: "assign_role"
+      description: "Assigns a default role to the new user."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+        role: "standard_user"
+      outputs:
+        role_assignment_status: "{{ role_status }}"
+      rabbitmq:
+        publisher: "role_service_publisher"
+        subscriber: "role_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step5"
+      name: "Setup User Profile"
+      service_name: "profile_service"
+      action: "setup_profile"
+      description: "Initializes the user profile with default settings."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+        email: "{{ step1.outputs.email }}"
+      outputs:
+        profile_id: "{{ profile_id }}"
+      rabbitmq:
+        publisher: "profile_service_publisher"
+        subscriber: "profile_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step6"
+      name: "Send Verification Email"
+      service_name: "verification_service"
+      action: "send_verification"
+      description: "Sends an email verification link to the user."
+      inputs:
+        email: "{{ step1.outputs.email }}"
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        verification_status: "{{ verification_status }}"
+      rabbitmq:
+        subscriber: "verification_service_subscriber"
+        publisher: "verification_service_publisher"
+      dependencies:
+        - "step1"
+
+    - id: "step7"
+      name: "Activate User Account"
+      service_name: "user_service"
+      action: "activate_account"
+      description: "Activates the user account after verification."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+        verification_status: "{{ step6.outputs.verification_status }}"
+      outputs:
+        activation_status: "{{ activation_status }}"
+      rabbitmq:
+        subscriber: "user_service_subscriber"
+      dependencies:
+        - "step6"
+
+    - id: "step8"
+      name: "Notify Admin"
+      service_name: "notification_service"
+      action: "notify_admin"
+      description: "Sends a notification to the admin about the new user."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+        email: "{{ step1.outputs.email }}"
+      outputs:
+        notification_status: "{{ notification_status }}"
+      rabbitmq:
+        publisher: "notification_service_publisher"
+        subscriber: "notification_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step9"
+      name: "Initialize User Settings"
+      service_name: "settings_service"
+      action: "initialize_settings"
+      description: "Initializes default settings for the user."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        settings_status: "{{ settings_status }}"
+      rabbitmq:
+        publisher: "settings_service_publisher"
+        subscriber: "settings_service_subscriber"
+      dependencies:
+        - "step5"
+
+    - id: "step10"
+      name: "Send Onboarding Survey"
+      service_name: "survey_service"
+      action: "send_survey"
+      description: "Sends an onboarding survey to the user."
+      inputs:
+        email: "{{ step1.outputs.email }}"
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        survey_status: "{{ survey_status }}"
+      rabbitmq:
+        publisher: "survey_service_publisher"
+        subscriber: "survey_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step11"
+      name: "Monitor User Activity"
+      service_name: "monitoring_service"
+      action: "start_monitoring"
+      description: "Starts monitoring the user's activity."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        monitoring_status: "{{ monitoring_status }}"
+      dependencies:
+        - "step7"
+        - "step9"
+
+    - id: "step12"
+      name: "Setup User Preferences"
+      service_name: "preferences_service"
+      action: "setup_preferences"
+      description: "Sets up user-specific preferences."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        preferences_status: "{{ preferences_status }}"
+      rabbitmq:
+        publisher: "preferences_service_publisher"
+        subscriber: "preferences_service_subscriber"
+      dependencies:
+        - "step5"
+
+    - id: "step13"
+      name: "Integrate Third-Party Services"
+      service_name: "integration_service"
+      action: "integrate_services"
+      description: "Integrates the user account with third-party services."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        integration_status: "{{ integration_status }}"
+      rabbitmq:
+        publisher: "integration_service_publisher"
+        subscriber: "integration_service_subscriber"
+      dependencies:
+        - "step5"
+
+    - id: "step14"
+      name: "Send SMS Notification"
+      service_name: "sms_service"
+      action: "send_sms"
+      description: "Sends an SMS notification to the user."
+      inputs:
+        phone_number: "{{ trigger.input.phone_number }}"
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        sms_status: "{{ sms_status }}"
+      rabbitmq:
+        publisher: "sms_service_publisher"
+        subscriber: "sms_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step15"
+      name: "Backup User Data"
+      service_name: "backup_service"
+      action: "backup_data"
+      description: "Backs up the user's data for recovery purposes."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        backup_status: "{{ backup_status }}"
+      rabbitmq:
+        publisher: "backup_service_publisher"
+        subscriber: "backup_service_subscriber"
+      dependenciedds:
+        - "step1"
+
+    - id: "step16"
+      name: "Generate User Report"
+      service_name: "reporting_service"
+      action: "generate_report"
+      description: "Generates a report for the new user."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        report_id: "{{ report_id }}"
+      rabbitmq:
+        publisher: "reporting_service_publisher"
+        subscriber: "reporting_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step17"
+      name: "Archive Onboarding Data"
+      service_name: "archive_service"
+      action: "archive_data"
+      description: "Archives the onboarding data after completion."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+        report_id: "{{ step16.outputs.report_id }}"
+      outputs:
+        archive_status: "{{ archive_status }}"
+      rabbitmq:
+        publisher: "archive_service_publisher"
+        subscriber: "archive_service_subscriber"
+      dependencies:
+        - "step3"
+        - "step16"
+
+    - id: "step18"
+      name: "Notify User of Completion"
+      service_name: "notification_service"
+      action: "notify_completion"
+      description: "Notifies the user that the onboarding process is complete."
+      inputs:
+        email: "{{ step1.outputs.email }}"
+        user_id: "{{ step1.outputs.user_id }}"
+      outputs:
+        completion_status: "{{ completion_status }}"
+      rabbitmq:
+        publisher: "notification_service_publisher"
+        subscriber: "notification_service_subscriber"
+      dependencies:
+        - "step11"
+        - "step14"
+        - "step17"
+
+    - id: "step19"
+      name: "Finalize Onboarding"
+      service_name: "onboarding_service"
+      action: "finalize"
+      description: "Finalizes the onboarding process."
+      inputs:
+        user_cxcid: "{{ step1.outputs.user_id }}"
+        completion_status: "{{ step18.outputs.completion_status }}"
+      outputs:
+        finalize_status: "{{ finalize_status }}"
+      rabbitmq:
+        publisher: "onboarding_service_publisher"
+        subscriber: "onboarding_service_subscriber"
+      dependencsies:
+        - "step18"
+
+    - id: "step20"
+      name: "Cleanup Temporary Data"
+      service_name: "cleanup_service"
+      action: "cleanup"
+      description: "Cleans up any temporary data used during onboarding."
+      inputs:
+        user_id: "{{ step1.outputs.user_id }}"
+        finalize_status: "{{ step19.outputs.finalize_status }}"
+      outputs:
+        cleanup_status: "{{ cleanup_status }}"
+      rabbitmq:
+        publisher: "cleanup_service_publisher"
+        subscriber: "cleanup_service_subscriber"
+      dependencies:
+        - "step19"
+
+error_handling:
+  retry_policy:
+    max_retries: 3  # Number of retry attempts for failed steps
+    backoff_strategy: "exponential"  # Choose from "none", "fixed", "exponential"
+  on_failure: "abort"  # Choose from "abort", "continue", "fallback"

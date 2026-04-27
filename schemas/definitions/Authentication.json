@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Authentication",
+    "type": "object",
+    "description": "Authentication details required to interact with the service.",
+    "properties": {
+      "type": {
+        "$ref": "Enums.json#/properties/authenticationTypeEnum"
+      },
+      "credentials": {
+        "type": "object",
+        "description": "Credentials required based on the authentication type.",
+        "properties": {
+          "api_key": {
+            "type": "string",
+            "description": "API key for services using API_Key authentication."
+          },
+          "token_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Token URL for OAuth2 authentication."
+          },
+          "client_id": {
+            "type": "string",
+            "description": "Client ID for OAuth2 or Basic authentication."
+          },
+          "client_secret": {
+            "type": "string",
+            "description": "Client Secret for OAuth2 or Basic authentication."
+          }
+        },
+        "required": ["type"],
+        "additionalProperties": false
+      }
+    },
+    "required": ["type"],
+    "additionalProperties": false
+  }
+  

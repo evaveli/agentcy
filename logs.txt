@@ -1,0 +1,120 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.10.9, pytest-7.4.3, pluggy-1.5.0
+rootdir: /Users/xhulioskenderi/Desktop/pipeline-orchestrator
+configfile: pytest.ini
+testpaths: tests
+plugins: time-machine-2.16.0, anyio-3.7.1
+collected 12 items / 4 errors
+
+==================================== ERRORS ====================================
+_ ERROR collecting tests/integration_tests/couchbase_integration_tests/test_basic_couchbase_connection.py _
+ImportError while importing test module '/Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/integration_tests/couchbase_integration_tests/test_basic_couchbase_connection.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../.pyenv/versions/3.10.9/lib/python3.10/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/integration_tests/couchbase_integration_tests/test_basic_couchbase_connection.py:6: in <module>
+    from src.couchbase_configs.couchbase_connection_orchestrator import ConnectionOrchestrator
+src/couchbase_configs/couchbase_connection_orchestrator.py:10: in <module>
+    from couchbase_circuit_breaker import CircuitBreaker
+E   ModuleNotFoundError: No module named 'couchbase_circuit_breaker'
+_ ERROR collecting tests/unit_tests/couchbase_unit_tests/test_couchbase_load_balancer.py _
+ImportError while importing test module '/Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_couchbase_load_balancer.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../.pyenv/versions/3.10.9/lib/python3.10/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit_tests/couchbase_unit_tests/test_couchbase_load_balancer.py:3: in <module>
+    from src.couchbase_configs.couchbase_load_balancer import LoadBalancer
+src/couchbase_configs/couchbase_load_balancer.py:5: in <module>
+    from load_balancer_helpers import PingLatencyTester, WeightedLatencyModel
+E   ModuleNotFoundError: No module named 'load_balancer_helpers'
+_ ERROR collecting tests/unit_tests/couchbase_unit_tests/test_distributed_couchase_connection_pool.py _
+ImportError while importing test module '/Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_distributed_couchase_connection_pool.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../.pyenv/versions/3.10.9/lib/python3.10/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit_tests/couchbase_unit_tests/test_distributed_couchase_connection_pool.py:5: in <module>
+    from src.couchbase_configs.couchbase_distributed_connection_pool import DistributedConnectionPool
+src/couchbase_configs/couchbase_distributed_connection_pool.py:3: in <module>
+    from src.couchbase_configs.couchbase_load_balancer import LoadBalancer
+src/couchbase_configs/couchbase_load_balancer.py:5: in <module>
+    from load_balancer_helpers import PingLatencyTester, WeightedLatencyModel
+E   ModuleNotFoundError: No module named 'load_balancer_helpers'
+____ ERROR collecting tests/unit_tests/dag_unit_tests/test_config_parser.py ____
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/runner.py:341: in from_call
+    result: Optional[TResult] = func()
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/runner.py:372: in <lambda>
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/python.py:531: in collect
+    self._inject_setup_module_fixture()
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/python.py:545: in _inject_setup_module_fixture
+    self.obj, ("setUpModule", "setup_module")
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/python.py:310: in obj
+    self._obj = obj = self._getobj()
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/python.py:528: in _getobj
+    return self._importtestmodule()
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/python.py:617: in _importtestmodule
+    mod = import_path(self.path, mode=importmode, root=self.config.rootpath)
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/pathlib.py:567: in import_path
+    importlib.import_module(module_name)
+../../.pyenv/versions/3.10.9/lib/python3.10/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1050: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1027: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1006: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:688: in _load_unlocked
+    ???
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/assertion/rewrite.py:186: in exec_module
+    exec(co, module.__dict__)
+tests/unit_tests/dag_unit_tests/test_config_parser.py:4: in <module>
+    from src.airflow_dags.airflow_config_parser import ConfigParser
+src/airflow_dags/airflow_config_parser.py:108: in <module>
+    execution_order, task_graph = parse_dag(dag_config)
+E   NameError: name 'parse_dag' is not defined
+=============================== warnings summary ===============================
+../../.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/config/__init__.py:1373
+  /Users/xhulioskenderi/.pyenv/versions/3.10.9/lib/python3.10/site-packages/_pytest/config/__init__.py:1373: PytestConfigWarning: Unknown config option: asyncio_default_fixture_loop_scope
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+tests/unit_tests/couchbase_unit_tests/test_database.py:13
+  /Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_database.py:13: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit_tests/couchbase_unit_tests/test_database.py:37
+  /Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_database.py:37: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit_tests/couchbase_unit_tests/test_database.py:54
+  /Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_database.py:54: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit_tests/couchbase_unit_tests/test_database.py:72
+  /Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_database.py:72: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit_tests/couchbase_unit_tests/test_database.py:89
+  /Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_database.py:89: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit_tests/couchbase_unit_tests/test_database.py:105
+  /Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_database.py:105: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit_tests/couchbase_unit_tests/test_database.py:119
+  /Users/xhulioskenderi/Desktop/pipeline-orchestrator/tests/unit_tests/couchbase_unit_tests/test_database.py:119: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/integration_tests/couchbase_integration_tests/test_basic_couchbase_connection.py
+ERROR tests/unit_tests/couchbase_unit_tests/test_couchbase_load_balancer.py
+ERROR tests/unit_tests/couchbase_unit_tests/test_distributed_couchase_connection_pool.py
+ERROR tests/unit_tests/dag_unit_tests/test_config_parser.py - NameError: name...
+!!!!!!!!!!!!!!!!!!! Interrupted: 4 errors during collection !!!!!!!!!!!!!!!!!!!!
+======================== 8 warnings, 4 errors in 0.55s =========================

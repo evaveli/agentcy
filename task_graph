@@ -1,0 +1,36 @@
+// Task Graph
+digraph {
+	register_agents [label="Register Agents"]
+	validate_input [label="Task Input Validation"]
+	supervisor_agent [label="Supervisor Agent"]
+	path_seeding [label="Path Seeding"]
+	blueprint_bid [label="Blueprint Bidder"]
+	graph_builder [label="Graph Builder"]
+	shacl_validation [label="SHACL Validation"]
+	plan_cache [label="Plan Cache"]
+	human_validation [label="Human Validation"]
+	llm_strategist [label="LLM Strategist"]
+	ethics_check [label="Ethics Check"]
+	system_execution [label="System Execution"]
+	pheromone_feedback [label="Pheromone Feedback"]
+	failure_escalation [label="Failure Escalation"]
+	audit_and_trace [label="Audit & Traceability"]
+	register_agents -> validate_input
+	register_agents -> path_seeding
+	validate_input -> supervisor_agent
+	supervisor_agent -> blueprint_bid
+	path_seeding -> graph_builder
+	blueprint_bid -> graph_builder
+	graph_builder -> shacl_validation
+	shacl_validation -> plan_cache
+	plan_cache -> human_validation
+	human_validation -> llm_strategist
+	llm_strategist -> ethics_check
+	llm_strategist -> system_execution
+	system_execution -> pheromone_feedback
+	system_execution -> failure_escalation
+	system_execution -> audit_and_trace
+	ethics_check -> audit_and_trace
+	failure_escalation -> audit_and_trace
+	pheromone_feedback -> audit_and_trace
+}

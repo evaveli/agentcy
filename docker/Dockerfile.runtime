@@ -1,0 +1,36 @@
+FROM python:3.11-slim
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates curl; \
+    rm -rf /var/lib/apt/lists/*
+
+ENV VENV=/opt/venv \
+    PATH="/opt/venv/bin:$PATH" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# use the venv's pip explicitly
+RUN python -m venv "$VENV" && "$VENV/bin/pip" install --upgrade pip
+
+WORKDIR /app
+# make /app/src importable as top-level 'agentcy'
+ENV PYTHONPATH=/app/src
+
+COPY requirements.txt /tmp/requirements/
+# use the venv's pip explicitly
+RUN "$VENV/bin/pip" install --no-cache-dir -r /tmp/requirements/requirements.txt
+
+COPY . /app
+RUN useradd -u 10002 -r -m appuser && chown -R appuser:appuser /app
+
+# optional pip cache for speed at runtime
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=0 \
+    PIP_CACHE_DIR=/home/appuser/.cache/pip
+
+USER appuser
+
+ENV LOG_LEVEL=INFO SERVICE_NAME=agent_runtime
+CMD ["sleep","infinity"]

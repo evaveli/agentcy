@@ -1,0 +1,12 @@
+{% for exchange in exchanges %}
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: {{ exchange.name }}
+spec:
+  name: "{{ exchange.name }}"
+  vhost: "{{ exchange.vhost }}"
+  type: "{{ exchange.type }}"
+  durable: {{ exchange.durable | lower }}
+---
+{% endfor %}

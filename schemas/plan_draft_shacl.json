@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "description": "SHACL-inspired validation rules for plan drafts.",
+  "constraints": {
+    "tasks": {
+      "required_fields": ["task_id", "assigned_agent", "required_capabilities"],
+      "min_required_capabilities": 1,
+      "require_task_type_if_ontology": true
+    },
+    "edges": {
+      "require_known_tasks": true,
+      "disallow_cycles": true
+    },
+    "ontology": {
+      "enforce_capabilities": true,
+      "enforce_tags": true,
+      "enforce_task_types": true
+    }
+  }
+}

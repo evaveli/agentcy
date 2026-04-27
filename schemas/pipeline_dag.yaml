@@ -1,0 +1,313 @@
+pipeline_id: "pipeline-98765"
+name: "Enterprise Onboarding and Resource Provisioning DAG"
+description: "Handles multi-step onboarding, resource allocation, notifications, compliance checks, and complex dependencies for enterprise users."
+
+# RabbitMQ Configuration Section
+rabbitmq:
+  cluster:
+    nodes:
+      - "rabbitmq-node1.example.com"
+      - "rabbitmq-node2.example.com"
+      - "rabbitmq-node3.example.com"
+      - "rabbitmq-node4.example.com"
+      - "rabbitmq-node5.example.com"
+    vhost: "/enterprise"
+
+  exchanges:
+    - name: "enterprise.onboarding.exchange"
+      type: "topic"
+      durable: true
+      auto_delete: false
+      internal: false
+      arguments: {}
+
+    - name: "enterprise.provisioning.exchange"
+      type: "direct"
+      durable: true
+      auto_delete: false
+      internal: false
+      arguments: {}
+
+    - name: "compliance.check.exchange"
+      type: "fanout"
+      durable: true
+      auto_delete: false
+      internal: false
+      arguments: {}
+
+  queues:
+    - name: "user_creation_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 5
+
+    - name: "email_notification_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 5
+
+    - name: "analytics_logging_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 5
+
+    - name: "resource_provisioning_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 5
+
+    - name: "compliance_check_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 5
+
+    - name: "security_audit_queue"
+      type: "quorum"
+      durable: true
+      auto_delete: false
+      arguments:
+        x-quorum-initial-group-size: 5
+
+    - name: "finalization_queue"
+      type: "classic"
+      durable: true
+      auto_delete: false
+      arguments: {}
+
+  bindings:
+    - exchange: "enterprise.onboarding.exchange"
+      queue: "user_creation_queue"
+      routing_key: "enterprise.user.create"
+
+    - exchange: "enterprise.onboarding.exchange"
+      queue: "email_notification_queue"
+      routing_key: "enterprise.user.created.email"
+
+    - exchange: "enterprise.onboarding.exchange"
+      queue: "analytics_logging_queue"
+      routing_key: "enterprise.user.created.analytics"
+
+    - exchange: "enterprise.provisioning.exchange"
+      queue: "resource_provisioning_queue"
+      routing_key: "provision.resources"
+
+    - exchange: "compliance.check.exchange"
+      queue: "compliance_check_queue"
+      routing_key: "compliance.check"
+
+    - exchange: "compliance.check.exchange"
+      queue: "security_audit_queue"
+      routing_key: "security.audit"
+
+    - exchange: "enterprise.onboarding.exchange"
+      queue: "finalization_queue"
+      routing_key: "onboarding.finalize"
+
+  publishers:
+    - name: "user_service_publisher"
+      exchange: "enterprise.onboarding.exchange"
+      routing_key: "enterprise.user.create"
+
+    - name: "email_service_publisher"
+      exchange: "enterprise.onboarding.exchange"
+      routing_key: "enterprise.user.created.email"
+
+    - name: "analytics_service_publisher"
+      exchange: "enterprise.onboarding.exchange"
+      routing_key: "enterprise.user.created.analytics"
+
+    - name: "provisioning_service_publisher"
+      exchange: "enterprise.provisioning.exchange"
+      routing_key: "provision.resources"
+
+    - name: "compliance_service_publisher"
+      exchange: "compliance.check.exchange"
+      routing_key: "compliance.check"
+
+    - name: "security_service_publisher"
+      exchange: "compliance.check.exchange"
+      routing_key: "security.audit"
+
+    - name: "finalization_service_publisher"
+      exchange: "enterprise.onboarding.exchange"
+      routing_key: "onboarding.finalize"
+
+  subscribers:
+    - name: "user_service_subscriber"
+      queue: "user_creation_queue"
+      consumer_tag: "user_service_consumer"
+
+    - name: "email_service_subscriber"
+      queue: "email_notification_queue"
+      consumer_tag: "email_service_consumer"
+
+    - name: "analytics_service_subscriber"
+      queue: "analytics_logging_queue"
+      consumer_tag: "analytics_service_consumer"
+
+    - name: "provisioning_service_subscriber"
+      queue: "resource_provisioning_queue"
+      consumer_tag: "provisioning_service_consumer"
+
+    - name: "compliance_service_subscriber"
+      queue: "compliance_check_queue"
+      consumer_tag: "compliance_service_consumer"
+
+    - name: "security_service_subscriber"
+      queue: "security_audit_queue"
+      consumer_tag: "security_service_consumer"
+
+    - name: "finalization_service_subscriber"
+      queue: "finalization_queue"
+      consumer_tag: "finalization_service_consumer"
+
+# DAG Structure Section
+dag:
+  tasks:
+    - id: "step1"
+      name: "Create Enterprise User"
+      service_name: "user_service"
+      service_id: "11111f64-5717-4562-b3fc-2c963f66aaaa"
+      action: "Create User"
+      description: "Creates a new enterprise user account."
+      inputs:
+        user_data: "{{trigger.input.user_data}}"
+      outputs:
+        user_id: "{{user_id}}"
+        email: "{{email}}"
+      rabbitmq:
+        publisher: "user_service_publisher"
+      # No dependencies; starting task
+
+    - id: "step2"
+      name: "Send Welcome Packet Email"
+      service_name: "email_service"
+      service_id: "22222f64-5717-4562-b3fc-2c963f66bbbb"
+      action: "Send Welcome Email"
+      description: "Sends a welcome email with enterprise onboarding details."
+      inputs:
+        email: "{{step1.outputs.email}}"
+        user_id: "{{step1.outputs.user_id}}"
+      outputs:
+        email_status: "{{email_status}}"
+      rabbitmq:
+        subscriber: "email_service_subscriber"
+        publisher: "email_service_publisher"
+      dependencies:
+        - "step1"
+
+    - id: "step3"
+      name: "Log Onboarding Analytics"
+      service_name: "analytics_service"
+      service_id: "33333f64-5717-4562-b3fc-2c963f66cccc"
+      action: "Log Analytics"
+      description: "Logs detailed analytics for the onboarding event."
+      inputs:
+        user_id: "{{step1.outputs.user_id}}"
+        timestamp: "{{current_time}}"
+      outputs:
+        log_status: "{{log_status}}"
+      rabbitmq:
+        subscriber: "analytics_service_subscriber"
+      dependencies:
+        - "step1"
+
+    - id: "step4"
+      name: "Provision Resources"
+      service_name: "provisioning_service"
+      service_id: "44444f64-5717-4562-b3fc-2c963f66dddd"
+      action: "Provision Resources"
+      description: "Allocates necessary resources for the new enterprise user."
+      inputs:
+        user_id: "{{step1.outputs.user_id}}"
+      outputs:
+        provisioning_status: "{{provisioning_status}}"
+      rabbitmq:
+        subscriber: "provisioning_service_subscriber"
+        publisher: "provisioning_service_publisher"
+      dependencies:
+        - "step1"
+
+    - id: "step5"
+      name: "Perform Compliance Check"
+      service_name: "compliance_service"
+      service_id: "55555f64-5717-4562-b3fc-2c963f66eeee"
+      action: "Compliance Check"
+      description: "Performs compliance verification for the new user."
+      inputs:
+        user_id: "{{step1.outputs.user_id}}"
+      outputs:
+        compliance_status: "{{compliance_status}}"
+      rabbitmq:
+        subscriber: "compliance_service_subscriber"
+        publisher: "compliance_service_publisher"
+      dependencies:
+        - "step4"
+
+    - id: "step6"
+      name: "Conduct Security Audit"
+      service_name: "security_service"
+      service_id: "66666f64-5717-4562-b3fc-2c963f66ffff"
+      action: "Security Audit"
+      description: "Runs a security audit on the provisioned resources."
+      inputs:
+        user_id: "{{step1.outputs.user_id}}"
+        resources: "{{step4.outputs.provisioning_status}}"
+      outputs:
+        audit_status: "{{audit_status}}"
+      rabbitmq:
+        subscriber: "security_service_subscriber"
+        publisher: "security_service_publisher"
+      dependencies:
+        - "step4"
+
+    - id: "step7"
+      name: "Finalize Onboarding"
+      service_name: "finalization_service"
+      service_id: "77777f64-5717-4562-b3fc-2c963f66gggg"
+      action: "Finalize Onboarding"
+      description: "Finalizes the onboarding process after all checks."
+      inputs:
+        user_id: "{{step1.outputs.user_id}}"
+        compliance_status: "{{step5.outputs.compliance_status}}"
+        audit_status: "{{step6.outputs.audit_status}}"
+      outputs:
+        onboarding_status: "{{onboarding_status}}"
+      rabbitmq:
+        subscriber: "finalization_service_subscriber"
+        publisher: "finalization_service_publisher"
+      dependencies:
+        - "step5"
+        - "step6"
+
+  # Edges are implicitly defined via the 'dependencies' field in each task
+
+# Error Handling Section
+error_handling:
+  retry_policy:
+    max_retries: 5
+    backoff_strategy: "exponential"
+  on_failure: "abort"
+
+# Parallel Execution Section
+parallel_execution:
+  enabled: true
+  rules:
+    - steps: ["step1"]
+      can_run_in_parallel: false
+    - steps: ["step2", "step3", "step4"]
+      can_run_in_parallel: true
+    - steps: ["step5", "step6"]
+      can_run_in_parallel: true
+    - steps: ["step7"]
+      can_run_in_parallel: false

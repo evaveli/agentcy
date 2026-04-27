@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ service_name }}
+  labels:
+    service_id: "{{ service_id }}"
+    {% if version %}
+    version: "{{ version }}"
+    {% endif %}
+spec:
+  replicas: {{ deployment.replicas }}
+  selector:
+    matchLabels:
+      service_id: "{{ service_id }}"
+  template:
+    metadata:
+      labels:
+        service_id: "{{ service_id }}"
+    spec:
+      containers:
+        - name: {{ service_name }}
+          image: {{ image_tag }}
+          env:
+            {% for name, value in deployment.environment_variables.variables.items() %}
+            - name: {{ name }}
+              value: "{{ value }}"
+            {% endfor %}
+          volumeMounts:
+          {% for volume in volumes %}
+            - name: {{ volume.name }}
+              mountPath: {{ volume.mount_path }}
+              readOnly: {{ volume.read_only }}
+           {% endfor %}
+          readinessProbe:
+            httpGet:
+              path: {{ deployment.health_check.endpoint }}
+              port: {{ deployment.health_check.port }}
+            initialDelaySeconds: {{ deployment.h }}
+            periodSeconds: {{ deployment.health_check.interval }}
+          livenessProbe:
+            httpGet:
+              path: {{ deployment.health_check.endpoint }}
+              port: {{ deployment.health_check.port }}
+            initialDelaySeconds: 
+            periodSeconds: {{ deployment.health_check.interval }}
+          resources:
+            requests:
+              memory: {{ deployment.resource_allocation.requested_resources.memory }}
+              cpu: {{ deployment.resource_allocation.requested_resources.cpu }}
+            limits:
+              memory: {{ deployment.resource_allocation.max_resources.memory }}
+              cpu: {{ deployment.resource_allocation.max_resources.cpu }}
+      volumes:
+        {% for volume in volumes %}
+        - name: {{ volume.name }}
+          persistentVolumeClaim:
+            claimName:  {{ volume.name }}
+        {% endfor %}

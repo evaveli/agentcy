@@ -1,0 +1,33 @@
+FROM python:3.11-slim
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates curl; \
+    rm -rf /var/lib/apt/lists/*
+
+ENV VENV=/opt/venv \
+    PATH="/opt/venv/bin:$PATH" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# use the venv’s pip explicitly
+RUN python -m venv "$VENV" && "$VENV/bin/pip" install --upgrade pip
+
+WORKDIR /app
+# make /app/src importable as top-level 'agentcy'
+ENV PYTHONPATH=/app/src
+
+COPY requirements.txt /tmp/requirements/
+# use the venv’s pip explicitly
+RUN "$VENV/bin/pip" install --no-cache-dir -r /tmp/requirements/requirements.txt
+
+COPY . /app
+RUN useradd -u 10001 -r -m appuser && chown -R appuser:appuser /app
+USER appuser
+
+EXPOSE 8001
+HEALTHCHECK --interval=10s --timeout=3s --retries=10 CMD curl -fsS http://localhost:8001/health || exit 1
+
+# start uvicorn via the venv python (no PATH dependence)
+CMD ["/opt/venv/bin/python","-m","uvicorn","agentcy.orchestrator_core.core_main:app","--host","0.0.0.0","--port","8001","--workers","1","--proxy-headers"]

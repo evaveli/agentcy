@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  couchbase:
+    image: couchbase:community
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210:11210"
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://127.0.0.1:8091/ui/index.html"]
+      interval: 10s
+      timeout: 5s
+      retries: 60
+      start_period: 30s
+
+  couchbase-setup:
+    image: couchbase:community
+    # <-- inject all your CB_* vars
+    env_file:
+      - .env.ci
+    # <-- mount only your init script
+    volumes:
+      - ./init-couchbase.sh:/init-couchbase.sh:ro
+    entrypoint: ["/bin/bash", "/init-couchbase.sh"]
+    depends_on:
+      couchbase:
+        condition: service_healthy
+    restart: "no"

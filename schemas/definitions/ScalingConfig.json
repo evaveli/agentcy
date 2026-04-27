@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "ScalingConfig",
+    "type": "object",
+    "description": "Scaling configurations for the service.",
+    "properties": {
+      "auto_scale": {
+        "type": "boolean",
+        "description": "Indicates if auto-scaling is enabled."
+      },
+      "min_replicas": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Minimum number of service instances."
+      },
+      "max_replicas": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum number of service instances."
+      },
+      "metrics": {
+        "type": "array",
+        "description": "List of metrics to monitor for scaling decisions.",
+        "items": {
+          "type": "string",
+          "description": "Name of the metric (e.g., 'CPUUsage')."
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+
+  

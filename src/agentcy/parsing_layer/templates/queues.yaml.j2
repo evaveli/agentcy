@@ -1,0 +1,59 @@
+{% for qcollection in queues %}
+{% if qcollection.dlx %}
+# DLX Exchange
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: {{ qcollection.dlx.name }}
+spec:
+  name: "{{ qcollection.dlx.name }}"
+  vhost: "{{ qcollection.dlx.vhost }}"
+  type: "{{ qcollection.dlx.type }}"
+  durable: {{ qcollection.dlx.durable | lower }}
+  {% if qcollection.dlx.arguments %}
+  arguments:
+    {% for key, value in qcollection.dlx.arguments.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
+  {% endif %}
+---
+{% endif %}
+
+{% if qcollection.dlq %}
+# DLQ
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: {{ qcollection.dlq.name }}
+spec:
+  name: "{{ qcollection.dlq.name }}"
+  vhost: "{{ qcollection.dlq.vhost }}"
+  durable: {{ qcollection.dlq.durable | lower }}
+  type: "{{ qcollection.dlq.type }}"
+  {% if qcollection.dlq.arguments %}
+  arguments:
+    {% for key, value in qcollection.dlq.arguments.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
+  {% endif %}
+---
+{% endif %}
+
+# Main Queue
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: {{ qcollection.queue.name }}
+spec:
+  name: "{{ qcollection.queue.name }}"
+  vhost: "{{ qcollection.queue.vhost }}"
+  durable: {{ qcollection.queue.durable | lower }}
+  type: "{{ qcollection.queue.type }}"
+  {% if qcollection.queue.arguments %}
+  arguments:
+    {% for key, value in qcollection.queue.arguments.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
+  {% endif %}
+---
+{% endfor %}

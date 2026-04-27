@@ -1,0 +1,33 @@
+__pycache__/
+**/__pycache__
+*.pyc
+*.pyo
+*.egg-info/
+venv/
+.venv/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+airflow
+certificates
+docker-compose-airflow.yml
+.vscode/
+.DS_Store
+examples_and_stubs
+agents
+elastic-install-files
+
+# Claude Code
+.claude/
+
+# Frontend
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+TECHNICAL_ANALYSTS.md
+docs/
+PARTIALLY_IMPLEMENTED.md

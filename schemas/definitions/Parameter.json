@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Parameter",
+    "type": "object",
+    "required": ["name", "in", "type"],
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Name of the parameter."
+      },
+      "in": {
+        "$ref": "../enums/Enums.json#/properties/parameterInEnum",
+        "description": "Location of the parameter."
+      },
+      "type": {
+        "type": "string",
+        "description": "Data type of the parameter (e.g., 'string', 'integer')."
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Indicates if the parameter is required."
+      },
+      "description": {
+        "type": "string",
+        "description": "Detailed description of the parameter."
+      }
+    },
+    "additionalProperties": false
+  }
+  

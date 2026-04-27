@@ -1,0 +1,156 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix ac: <http://agentcy.ai/ontology#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ac:PlanShape a sh:NodeShape ;
+    sh:targetClass ac:Plan ;
+    sh:property [
+        sh:path ac:hasTask ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 0 ;
+    ] .
+
+ac:TaskShape a sh:NodeShape ;
+    sh:targetClass ac:Task ;
+    sh:property [
+        sh:path ac:taskId ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:assignedAgent ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:requiresCapability ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:dependsOn ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 0 ;
+    ] .
+
+ac:ExecutionShape a sh:NodeShape ;
+    sh:targetClass ac:Execution ;
+    sh:property [
+        sh:path ac:executionOf ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:executedBy ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:executionStatus ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:executedAt ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:attemptNumber ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+    ] .
+
+ac:DataFlowShape a sh:NodeShape ;
+    sh:targetClass ac:DataFlow ;
+    sh:property [
+        sh:path ac:fromTask ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:toTask ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:flowTimestamp ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 1 ;
+    ] .
+
+ac:TemplateShape a sh:NodeShape ;
+    sh:targetClass ac:Template ;
+    sh:property [
+        sh:path ac:templateId ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:templateName ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] .
+
+ac:DomainEntityShape a sh:NodeShape ;
+    sh:targetClass ac:DomainEntity ;
+    sh:property [
+        sh:path ac:entityName ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] .
+
+# ─────────────────────────────────────────────────────────────────────
+# Domain-specific constraint shapes for logistics experiment
+# SHACL layer: structural / plan-level validation
+# Checks plan structure and approval gates — does NOT check runtime data
+# Complementary to compliance agent which checks domain data
+# ─────────────────────────────────────────────────────────────────────
+
+# Structural: hazmat tasks MUST have human approval before execution
+ac:HazmatApprovalShape a sh:NodeShape ;
+    sh:targetClass ac:HazmatTask ;
+    sh:property [
+        sh:path ac:approvedBy ;
+        sh:minCount 1 ;
+        sh:class ac:HumanApproval ;
+        sh:message "Hazmat warehouse assignment requires human approval" ;
+    ] .
+
+# Structural: critical deals MUST have risk_level = high in the task spec
+ac:CriticalDealRiskShape a sh:NodeShape ;
+    sh:targetClass ac:CriticalDealTask ;
+    sh:property [
+        sh:path ac:riskLevel ;
+        sh:in ("high") ;
+        sh:message "Critical deals must be flagged as high risk in the task specification" ;
+    ] .
+
+# Structural: lease term must meet minimum threshold (24 months)
+ac:LeaseTermShape a sh:NodeShape ;
+    sh:targetClass ac:WarehouseAssignment ;
+    sh:property [
+        sh:path ac:leaseTermMonths ;
+        sh:minInclusive 24 ;
+        sh:datatype xsd:integer ;
+        sh:message "Lease term must be at least 24 months" ;
+    ] .
+
+# Structural: cold storage tasks must specify temperature range
+ac:ColdStorageSpecShape a sh:NodeShape ;
+    sh:targetClass ac:ColdStorageTask ;
+    sh:property [
+        sh:path ac:requiredTemperatureRange ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Cold storage tasks must specify required temperature range" ;
+    ] .
+
+# Structural: all warehouse assignments must have a compliance check dependency
+ac:ComplianceDependencyShape a sh:NodeShape ;
+    sh:targetClass ac:WarehouseAssignment ;
+    sh:property [
+        sh:path ac:requiresComplianceCheck ;
+        sh:hasValue true ;
+        sh:message "Warehouse assignments must pass compliance validation before proposal" ;
+    ] .
